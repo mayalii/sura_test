@@ -1,0 +1,367 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Light Pollution Detector",
+  "sura": "Sura",
+
+  "welcomeBack": "Welcome back",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "signUp": "Sign Up",
+  "dontHaveAccount": "Don't have an account? ",
+  "signUpLink": "Sign up",
+  "alreadyHaveAccount": "Already have an account? ",
+  "loginLink": "Login",
+  "createAccount": "Create Account",
+  "joinCommunity": "Join the stargazing community",
+  "fullName": "Full Name",
+  "username": "Username",
+  "enterEmail": "Enter your email",
+  "enterValidEmail": "Enter a valid email",
+  "enterPassword": "Enter your password",
+  "enterAPassword": "Enter a password",
+  "enterName": "Enter your name",
+  "chooseUsername": "Choose a username",
+  "usernameTooShort": "Username must be at least 3 characters",
+  "passwordTooShort": "Password must be at least 6 characters",
+  "errorNoAccount": "No account found with this email.",
+  "errorWrongPassword": "Incorrect email or password.",
+  "errorInvalidEmail": "Please enter a valid email.",
+  "errorTooManyRequests": "Too many attempts. Try again later.",
+  "errorLoginFailed": "Login failed. Please try again.",
+  "forgotPassword": "Forgot password?",
+  "resetPassword": "Reset Password",
+  "resetPasswordDesc": "Enter your email address and we'll send you a link to reset your password.",
+  "sendResetLink": "Send Reset Link",
+  "checkYourEmail": "Check Your Email",
+  "resetEmailSentTo": "We've sent a password reset link to",
+  "resetEmailInstructions": "Open the email and tap the link to set a new password. Then come back and log in.",
+  "backToLogin": "Back to Login",
+  "didntGetEmail": "Didn't get the email? ",
+  "resend": "Resend",
+  "resetPasswordFailed": "Failed to send reset email. Check your email address.",
+  "errorEmailInUse": "This email is already registered.",
+  "errorWeakPassword": "Password must be at least 6 characters.",
+  "errorSignUpFailed": "Sign up failed. Please try again.",
+
+  "navHome": "Home",
+  "navSearch": "Search",
+  "navCamera": "Camera",
+  "navMap": "Map",
+  "navReserve": "Reserve",
+  "navChat": "Chat",
+
+  "profile": "Profile",
+  "premium": "Premium",
+  "bookmarks": "Bookmarks",
+  "lists": "Lists",
+  "communities": "Communities",
+  "myReservations": "My Trips",
+  "settingsPrivacy": "Settings and privacy",
+  "helpCenter": "Help Center",
+  "logout": "Logout",
+  "language": "Language",
+
+  "failedToLoadPosts": "Failed to load posts.",
+  "noPostsYet": "No posts yet. Be the first to share!",
+  "cancel": "Cancel",
+  "post": "Post",
+  "whatsHappening": "What's happening?",
+  "everyoneCanReply": "Everyone can reply",
+  "deletePost": "Delete post",
+  "failedToPost": "Failed to post: {error}",
+  "@failedToPost": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "comments": "Comments",
+  "noCommentsYet": "No comments yet",
+  "addComment": "Add a comment...",
+
+  "posts": "Posts",
+  "repliesTab": "Replies",
+  "photos": "Photos",
+  "likesTab": "Likes",
+  "noPostsYetSimple": "No posts yet",
+  "noRepliesYet": "No replies yet",
+  "noPhotosYet": "No photos yet",
+  "noLikesYet": "No likes yet",
+  "loadingText": "Loading...",
+
+  "editProfile": "Edit profile",
+  "save": "Save",
+  "nameLabel": "Name",
+  "bioLabel": "Bio",
+  "locationLabel": "Location",
+  "websiteLabel": "Website",
+  "addWebsite": "Add your website",
+  "birthDate": "Birth date",
+  "addBirthDate": "Add your birth date",
+  "switchToProfessional": "Switch to Professional",
+  "takeAPhoto": "Take a photo",
+  "chooseFromGallery": "Choose from gallery",
+  "failedToSave": "Failed to save: {error}",
+  "@failedToSave": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+
+  "pollutionDetection": "Pollution Detection",
+  "takeOrUploadPhoto": "Take or upload a photo of the night sky\nto detect light pollution level",
+  "photoButton": "PHOTO",
+  "analyzing": "Analyzing...",
+  "analysisFailed": "Analysis Failed",
+  "unknownError": "Unknown error",
+  "reExamine": "Re-examine",
+  "skyQualityLabel": "Sky Quality:",
+  "details": "Details",
+  "bortleValue": "Bortle {value}",
+  "@bortleValue": {
+    "placeholders": {
+      "value": {"type": "int"}
+    }
+  },
+  "aiModelScore": "AI Model Score",
+  "pixelAnalysisScore": "Pixel Analysis Score",
+  "meanBrightness": "Mean Brightness",
+  "brightPixels": "Bright Pixels",
+  "darkPixels": "Dark Pixels",
+  "blueRatio": "Blue Ratio",
+  "orangeRatio": "Orange Ratio",
+  "brightnessDistribution": "Brightness Distribution",
+  "dark": "Dark",
+  "bright": "Bright",
+
+  "explore": "Explore",
+  "toggleLegend": "Toggle legend",
+  "lightPollutionOverlay": "Light Pollution Overlay",
+  "opacity": "Opacity",
+  "yearLabel": "Year: ",
+  "bortleScale": "Bortle Scale",
+  "searchLocation": "Search location...",
+  "tapLocation": "Tap a location on the map",
+  "orSearchCity": "or search for a city above",
+  "someDataFailed": "Some data couldn't be loaded. Showing available info.",
+
+  "stargazingScore": "Stargazing Score",
+  "outOf100": "out of 100",
+  "excellent": "Excellent",
+  "good": "Good",
+  "fair": "Fair",
+  "poor": "Poor",
+  "veryPoor": "Very Poor",
+  "clouds": "Clouds",
+  "moon": "Moon",
+  "bortle": "Bortle",
+
+  "skyPhotoAnalyzer": "Sky Photo Analyzer",
+  "uploadSkyPhoto": "Upload a sky photo",
+  "tapToSelect": "Tap to select from gallery",
+  "skyQuality": "Sky Quality",
+  "avgBrightness": "Avg Brightness",
+  "warmGlow": "Warm Glow",
+  "skyColor": "Sky Color: ",
+  "analyzeAnotherPhoto": "Analyze another photo",
+
+  "lightPollutionBortle": "Light Pollution (Bortle Scale)",
+  "classLabel": "Class {value} — {name}",
+  "@classLabel": {
+    "placeholders": {
+      "value": {"type": "int"},
+      "name": {"type": "String"}
+    }
+  },
+
+  "currentWeather": "Current Weather",
+  "cloudCover": "Cloud Cover",
+  "humidity": "Humidity",
+  "wind": "Wind",
+  "cloudCover24h": "Cloud Cover (24h)",
+
+  "sunTwilight": "Sun & Twilight",
+  "dayDuration": "Day: {duration}",
+  "@dayDuration": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "nightDuration": "Night: {duration}",
+  "@nightDuration": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "sunrise": "Sunrise",
+  "solarNoon": "Solar Noon",
+  "sunset": "Sunset",
+  "civilTwilightEnd": "Civil Twilight End",
+  "nauticalTwilightEnd": "Nautical Twilight End",
+  "astroTwilightEnd": "Astro. Twilight End",
+
+  "moonPhase": "Moon Phase",
+  "illuminated": "{percent}% illuminated",
+  "@illuminated": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "impact": "Impact",
+  "ageLabel": "Age",
+  "daysValue": "{value} days",
+  "@daysValue": {
+    "placeholders": {
+      "value": {"type": "String"}
+    }
+  },
+
+  "visiblePlanets": "Visible Planets",
+  "visible": "Visible",
+  "hidden": "Hidden",
+
+  "mapLegendRadiance": "Map Legend — Radiance",
+  "low": "Low",
+  "high": "High",
+
+  "comingSoon": "Coming Soon",
+  "underDevelopment": "{title} is under development",
+  "@underDevelopment": {
+    "placeholders": {
+      "title": {"type": "String"}
+    }
+  },
+
+  "bortleClass1Name": "Excellent Dark Sky",
+  "bortleClass1Desc": "The Milky Way casts shadows. Zodiacal light, gegenschein visible.",
+  "bortleClass2Name": "Typical Dark Sky",
+  "bortleClass2Desc": "Milky Way highly structured. Zodiacal light bright.",
+  "bortleClass3Name": "Rural Sky",
+  "bortleClass3Desc": "Milky Way still appears complex. Some light pollution on horizon.",
+  "bortleClass4Name": "Rural/Suburban Transition",
+  "bortleClass4Desc": "Milky Way visible but lacks detail. Light domes visible.",
+  "bortleClass5Name": "Suburban Sky",
+  "bortleClass5Desc": "Milky Way weak or invisible near horizon. Light domes prominent.",
+  "bortleClass6Name": "Bright Suburban Sky",
+  "bortleClass6Desc": "Milky Way only visible near zenith. Sky glow across entire horizon.",
+  "bortleClass7Name": "Suburban/Urban Transition",
+  "bortleClass7Desc": "Milky Way invisible. Sky has vague grayish-white hue.",
+  "bortleClass8Name": "City Sky",
+  "bortleClass8Desc": "Sky glows white or orange. Only bright constellations visible.",
+  "bortleClass9Name": "Inner City Sky",
+  "bortleClass9Desc": "Only Moon, planets, and a few bright stars visible.",
+
+  "pristineDarkSky": "Pristine Dark Sky",
+  "darkSky": "Dark Sky",
+  "ruralSky": "Rural Sky",
+  "suburbanSky": "Suburban Sky",
+  "brightSuburban": "Bright Suburban",
+  "urbanSky": "Urban Sky",
+  "innerCitySky": "Inner City Sky",
+  "cloudyOvercast": "Cloudy / Overcast",
+
+  "impactMinimal": "Minimal",
+  "impactLow": "Low",
+  "impactModerate": "Moderate",
+  "impactHigh": "High",
+  "impactSevere": "Severe",
+  "impactDescExcellent": "Excellent for stargazing",
+  "impactDescGood": "Good conditions",
+  "impactDescSome": "Some sky brightness",
+  "impactDescFaint": "Faint objects washed out",
+  "impactDescBright": "Bright moonlight limits visibility",
+
+  "veryBright": "Very bright",
+  "brightLabel": "Bright",
+  "moderate": "Moderate",
+  "dim": "Dim",
+  "faint": "Faint",
+
+  "reserveTitle": "Reserve a Trip",
+  "filterAll": "All",
+  "filterUpcoming": "Upcoming",
+  "filterPopular": "Popular",
+  "guidedBy": "Guided by",
+  "rating": "Rating",
+  "bortleClassLabel": "Bortle Class",
+  "groupSize": "Group Size",
+  "spotsLeftLabel": "Spots Left",
+  "durationHours": "{count} hours",
+  "@durationHours": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "bookNow": "Book Now",
+  "aboutTrip": "About this trip",
+  "whatsIncluded": "What's included",
+  "perPerson": "per person",
+  "noTripsAvailable": "No trips available",
+  "tripBooked": "Booked",
+  "tripBookedMsg": "Trip booked successfully!",
+
+  "createTrip": "Create Trip",
+  "tripTitle": "Trip Title",
+  "tripTitleHint": "e.g. Milky Way Photography Night",
+  "tripLocationHint": "e.g. AlUla, Saudi Arabia",
+  "tripDate": "Date",
+  "selectDate": "Select a date",
+  "duration": "Duration",
+  "hours": "hrs",
+  "price": "Price",
+  "fieldRequired": "This field is required",
+  "addItemHint": "Add an item...",
+  "tripCreated": "Trip posted successfully!",
+
+  "darkSkySite": "Dark Sky Site",
+  "reserveTrip": "Reserve",
+  "certifiedDarkSky": "Certified Dark Sky",
+  "bortleClassInfo": "Bortle {value} — {certification}",
+  "@bortleClassInfo": {
+    "placeholders": {
+      "value": {"type": "int"},
+      "certification": {"type": "String"}
+    }
+  },
+
+  "english": "English",
+  "arabic": "Arabic",
+
+  "premiumTitle": "Sura Premium",
+  "premiumSubtitle": "For dedicated astronomers and sky photographers",
+  "premiumFeatureTrips": "Create & Post Trips",
+  "premiumFeatureTripsDesc": "Create stargazing trips and share them with the community",
+  "premiumFeatureBadge": "Premium Badge",
+  "premiumFeatureBadgeDesc": "Stand out with a premium star badge on your profile",
+  "premiumFeaturePriority": "Priority Booking",
+  "premiumFeaturePriorityDesc": "Get early access to popular stargazing trips",
+  "premiumFeatureAnalysis": "Advanced Analysis",
+  "premiumFeatureAnalysisDesc": "Unlock detailed AI sky quality reports",
+  "premiumCriteriaTitle": "How to become Premium",
+  "premiumCriteria1": "Active interest in astronomy and astrophotography",
+  "premiumCriteria2": "Regular posts about sky photos and stargazing locations",
+  "premiumCriteria3": "Strong community presence with engaged followers",
+  "applyForPremium": "Apply for Premium",
+  "premiumApplied": "Application submitted! We'll review your profile.",
+  "premiumAlreadyActive": "You're a Premium member!",
+  "premiumApplicationFailed": "Application failed. Please try again.",
+  "premiumMemberSince": "Premium Member",
+  "premiumYourBenefits": "Your Benefits",
+
+  "myTripsTitle": "My Trips",
+  "noBookedTrips": "No booked trips yet",
+  "noBookedTripsDesc": "Trips you book will appear here",
+  "pickFromMap": "Pick from map",
+  "confirmLocation": "Confirm Location",
+  "changeCoverImage": "Change cover image",
+  "uploadingImage": "Uploading image...",
+
+  "verdictExcellent": "Excellent for stargazing! Milky Way should be visible.",
+  "verdictGood": "Good for stargazing. Many stars and constellations visible.",
+  "verdictDecent": "Decent for stargazing. Bright stars and planets visible.",
+  "verdictPoor": "Poor for stargazing. Only the brightest stars visible.",
+  "verdictVeryPoor": "Very poor for stargazing. Only a few stars visible.",
+  "verdictNotSuitable": "Not suitable for stargazing. Too much light pollution.",
+  "verdictCloudy": "Not suitable for stargazing. Sky is cloudy or overcast."
+}
