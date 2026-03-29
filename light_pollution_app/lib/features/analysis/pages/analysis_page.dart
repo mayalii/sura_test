@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:light_pollution_app/l10n/app_localizations.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import 'package:light_pollution_app/core/l10n/bortle_l10n.dart';
@@ -74,10 +75,13 @@ class AnalysisPage extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/logo_white.png',
-                    height: 160,
-                    opacity: const AlwaysStoppedAnimation(0.85),
+                  SvgPicture.asset(
+                    'assets/logo.svg',
+                    height: 220,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.white.withValues(alpha: 0.85),
+                      BlendMode.srcIn,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(
