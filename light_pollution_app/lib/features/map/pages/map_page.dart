@@ -187,6 +187,10 @@ class _MapPageState extends ConsumerState<MapPage> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.navy),
+          onPressed: () => context.pop(),
+        ),
         title: Text(
           l10n.explore,
           style: font(

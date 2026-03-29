@@ -49,6 +49,11 @@ final appRouter = GoRouter(
       path: '/signup',
       builder: (context, state) => const SignupPage(),
     ),
+    GoRoute(
+      path: '/map',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const MapPage(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return HomePage(navigationShell: navigationShell);
@@ -87,15 +92,6 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/analyze',
               builder: (context, state) => const AnalysisPage(),
-            ),
-          ],
-        ),
-        // Gallery (Map)
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/map',
-              builder: (context, state) => const MapPage(),
             ),
           ],
         ),

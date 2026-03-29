@@ -56,11 +56,6 @@ class HomePage extends ConsumerWidget {
               label: l10n.navCamera,
             ),
             NavigationDestination(
-              icon: Icon(Icons.explore_outlined, color: AppColors.textSecondary),
-              selectedIcon: const Icon(Icons.explore, color: AppColors.navy),
-              label: l10n.navMap,
-            ),
-            NavigationDestination(
               icon: Icon(Icons.confirmation_num_outlined, color: AppColors.textSecondary),
               selectedIcon: const Icon(Icons.confirmation_num, color: AppColors.navy),
               label: l10n.navReserve,

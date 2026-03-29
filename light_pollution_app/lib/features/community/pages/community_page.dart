@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:light_pollution_app/l10n/app_localizations.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
@@ -63,6 +64,12 @@ class CommunityPage extends ConsumerWidget {
           height: 36,
           colorFilter: const ColorFilter.mode(AppColors.navy, BlendMode.srcIn),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => context.push('/map'),
+            icon: const Icon(Icons.explore_outlined, color: AppColors.navy),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
