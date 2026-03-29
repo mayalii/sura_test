@@ -17,17 +17,17 @@ class ChatMessage {
 }
 
 class Conversation {
-  const Conversation({
+  Conversation({
     required this.id,
     required this.otherUser,
-    required this.messages,
+    required List<ChatMessage> messages,
     this.unreadCount = 0,
-  });
+  }) : messages = List.from(messages);
 
   final String id;
   final MockUser otherUser;
   final List<ChatMessage> messages;
-  final int unreadCount;
+  int unreadCount;
 
   ChatMessage get lastMessage => messages.last;
 
@@ -39,5 +39,13 @@ class Conversation {
     if (diff.inHours > 0) return '${diff.inHours}h';
     if (diff.inMinutes > 0) return '${diff.inMinutes}m';
     return 'now';
+  }
+
+  void addMessage(ChatMessage message) {
+    messages.add(message);
+  }
+
+  void markAsRead() {
+    unreadCount = 0;
   }
 }

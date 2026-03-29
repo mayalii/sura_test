@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
 import '../models/chat_models.dart';
+import '../models/mock_chats.dart';
 
 class ChatDetailPage extends StatefulWidget {
   const ChatDetailPage({super.key, required this.conversation});
@@ -20,7 +21,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    _messages = List.from(widget.conversation.messages);
+    _messages = widget.conversation.messages;
+    // Mark conversation as read when opened
+    widget.conversation.markAsRead();
+    MockChats.updateConversation(widget.conversation);
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
@@ -45,14 +49,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
+    final msg = ChatMessage(
+      id: 'new_${_messages.length}',
+      text: text,
+      senderId: 'me',
+      timestamp: DateTime.now(),
+    );
+
     setState(() {
-      _messages.add(ChatMessage(
-        id: 'new_${_messages.length}',
-        text: text,
-        senderId: 'me',
-        timestamp: DateTime.now(),
-      ));
+      widget.conversation.addMessage(msg);
     });
+    MockChats.updateConversation(widget.conversation);
     _messageController.clear();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());

@@ -5,7 +5,25 @@ import 'chat_models.dart';
 class MockChats {
   static const _myId = 'me';
 
+  // Shared state — persists during app session
+  static List<Conversation>? _cachedConversations;
+
   static List<Conversation> getConversations() {
+    _cachedConversations ??= _createConversations();
+    return _cachedConversations!;
+  }
+
+  static void updateConversation(Conversation updated) {
+    if (_cachedConversations == null) return;
+    final index = _cachedConversations!.indexWhere((c) => c.id == updated.id);
+    if (index != -1) {
+      _cachedConversations![index] = updated;
+    } else {
+      _cachedConversations!.insert(0, updated);
+    }
+  }
+
+  static List<Conversation> _createConversations() {
     return [
       Conversation(
         id: 'conv_1',

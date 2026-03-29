@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../community/models/community_models.dart';
+import '../../community/models/mock_data.dart';
 import '../models/chat_models.dart';
 import '../models/mock_chats.dart';
 import 'chat_detail_page.dart';
@@ -39,6 +41,42 @@ class _ChatListPageState extends State<ChatListPage> {
     }).toList();
   }
 
+  void _showNewMessageSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (ctx, scrollController) => _NewMessageSheet(
+          scrollController: scrollController,
+          onUserSelected: (user) {
+            Navigator.pop(ctx);
+            final newConv = Conversation(
+              id: 'new_${user.id}',
+              otherUser: user,
+              messages: [
+                ChatMessage(
+                  id: 'placeholder',
+                  text: '',
+                  senderId: user.id,
+                  timestamp: DateTime.now(),
+                ),
+              ],
+            );
+            Navigator.of(context, rootNavigator: true).push(
+              MaterialPageRoute(
+                builder: (_) => ChatDetailPage(conversation: newConv),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
@@ -65,9 +103,28 @@ class _ChatListPageState extends State<ChatListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'chatFab',
-        onPressed: () {},
+        onPressed: () => _showNewMessageSheet(context),
         backgroundColor: AppColors.navy,
-        child: const Icon(Icons.mail_outline, color: AppColors.white),
+        shape: const CircleBorder(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Icon(Icons.chat_bubble, color: AppColors.white, size: 26),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.add, color: AppColors.navy, size: 12),
+              ),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -145,12 +202,16 @@ class _ChatListPageState extends State<ChatListPage> {
                       final conv = filtered[index];
                       return _ConversationTile(
                         conversation: conv,
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
+                        onTap: () async {
+                          await Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
                               builder: (_) => ChatDetailPage(conversation: conv),
                             ),
                           );
+                          // Refresh list when coming back
+                          setState(() {
+                            _conversations = MockChats.getConversations();
+                          });
                         },
                       );
                     },
@@ -161,6 +222,191 @@ class _ChatListPageState extends State<ChatListPage> {
     );
   }
 }
+
+// ── New Message Sheet with search ──
+
+class _NewMessageSheet extends StatefulWidget {
+  const _NewMessageSheet({
+    required this.scrollController,
+    required this.onUserSelected,
+  });
+
+  final ScrollController scrollController;
+  final void Function(MockUser user) onUserSelected;
+
+  @override
+  State<_NewMessageSheet> createState() => _NewMessageSheetState();
+}
+
+class _NewMessageSheetState extends State<_NewMessageSheet> {
+  final _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<MockUser> get _filteredUsers {
+    if (_query.isEmpty) return MockData.allUsers;
+    final q = _query.toLowerCase();
+    return MockData.allUsers.where((user) {
+      return user.name.toLowerCase().contains(q) ||
+          user.username.toLowerCase().contains(q);
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final font = AppFonts.style(context);
+    final users = _filteredUsers;
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Column(
+        children: [
+          // Handle
+          Container(
+            margin: const EdgeInsets.only(top: 10, bottom: 6),
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: AppColors.divider,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          // Title row
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Text(
+                  'New Message',
+                  style: font(
+                    color: AppColors.navy,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close, color: AppColors.textSecondary, size: 22),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+          // Search bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.divider),
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(width: 14),
+                  Icon(Icons.search, color: AppColors.textHint, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: (v) => setState(() => _query = v),
+                      style: font(fontSize: 14, color: AppColors.textPrimary),
+                      decoration: InputDecoration(
+                        hintText: 'Search people...',
+                        hintStyle: font(fontSize: 14, color: AppColors.textHint),
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 9),
+                      ),
+                    ),
+                  ),
+                  if (_query.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        _searchController.clear();
+                        setState(() => _query = '');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Icon(Icons.close, color: AppColors.textHint, size: 16),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const Divider(height: 1, color: AppColors.divider),
+          // User list
+          Expanded(
+            child: users.isEmpty
+                ? Center(
+                    child: Text(
+                      'No users found',
+                      style: font(color: AppColors.textSecondary, fontSize: 15),
+                    ),
+                  )
+                : ListView.builder(
+                    controller: widget.scrollController,
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      final user = users[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                          radius: 22,
+                          backgroundColor: AppColors.navy,
+                          child: Text(
+                            user.avatarInitials,
+                            style: font(
+                              color: AppColors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        title: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                user.name,
+                                style: font(
+                                  color: AppColors.textPrimary,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (user.isVerified) ...[
+                              const SizedBox(width: 4),
+                              Icon(Icons.verified, color: AppColors.navy, size: 16),
+                            ],
+                          ],
+                        ),
+                        subtitle: Text(
+                          user.username,
+                          style: font(color: AppColors.textSecondary, fontSize: 13),
+                        ),
+                        onTap: () => widget.onUserSelected(user),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Conversation Tile ──
 
 class _ConversationTile extends StatelessWidget {
   const _ConversationTile({required this.conversation, required this.onTap});
@@ -181,7 +427,6 @@ class _ConversationTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            // Avatar
             CircleAvatar(
               radius: 24,
               backgroundColor: AppColors.navy,
@@ -195,7 +440,6 @@ class _ConversationTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
