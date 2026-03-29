@@ -8,9 +8,13 @@ import 'features/reserve/providers/reserve_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await MockData.seedFirestore();
-  await seedTripsIfNeeded();
-  await AuthService().ensurePremiumStatus();
+  try {
+    await Firebase.initializeApp();
+    await MockData.seedFirestore();
+    await seedTripsIfNeeded();
+    await AuthService().ensurePremiumStatus();
+  } catch (e) {
+    debugPrint('Initialization error: $e');
+  }
   runApp(const ProviderScope(child: LightPollutionApp()));
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        context.go('/community');
+        final loggedIn = FirebaseAuth.instance.currentUser != null;
+        context.go(loggedIn ? '/community' : '/login');
       }
     });
   }

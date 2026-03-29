@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/storage_service.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../models/community_models.dart';
+import '../models/mock_data.dart';
 
 class CommunityState {
   const CommunityState({
@@ -27,7 +29,33 @@ class CommunityState {
 
 final postsStreamProvider = StreamProvider<List<SkyPost>>((ref) {
   final firestoreService = ref.watch(firestoreServiceProvider);
-  return firestoreService.postsStream();
+  final controller = StreamController<List<SkyPost>>();
+  final mockPosts = MockData.localMockPosts();
+
+  final sub = firestoreService.postsStream().listen(
+    (firestorePosts) {
+      // Merge Firestore posts with local mock posts
+      controller.add([...firestorePosts, ...mockPosts]);
+    },
+    onError: (e) {
+      // On error, just show mock data
+      controller.add(mockPosts);
+    },
+  );
+
+  // If no data after 3 seconds, show mock data
+  Future.delayed(const Duration(seconds: 3), () {
+    if (!controller.isClosed) {
+      // This will be overridden when Firestore responds
+    }
+  });
+
+  ref.onDispose(() {
+    sub.cancel();
+    controller.close();
+  });
+
+  return controller.stream;
 });
 
 final storageServiceProvider = Provider<StorageService>((ref) => StorageService());

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'community_models.dart';
 
@@ -86,9 +87,13 @@ class MockData {
   static Future<void> seedFirestore() async {
     final db = FirebaseFirestore.instance;
 
-    // Check if data already exists
-    final postsSnapshot = await db.collection('posts').limit(1).get();
-    if (postsSnapshot.docs.isNotEmpty) return; // Already seeded
+    // Check if mock data already exists
+    final mockUserSnapshot = await db.collection('users').doc('mock_1').get();
+    if (mockUserSnapshot.exists) {
+      debugPrint('Mock data already seeded, skipping');
+      return;
+    }
+    debugPrint('Seeding mock data...');
 
     // Create mock user documents (using fixed IDs like 'mock_1', 'mock_2', etc.)
     final userIdMap = <String, String>{}; // old id -> firestore doc id
@@ -255,5 +260,159 @@ class MockData {
         }
       }
     }
+    debugPrint('Mock data seeded successfully!');
+  }
+
+  /// Returns local mock posts for when Firestore is unavailable.
+  static List<SkyPost> localMockPosts() {
+    return [
+      SkyPost(
+        id: 'local_1',
+        user: suraOfficial,
+        caption: 'السماء اليوم كأنها حلم :)\nجرّبو ميزة اختبار التلوث الضوئي\nوخلونا نشوف السماء من حولكم',
+        imageAssets: ['milky_way'],
+        imageUrls: [],
+        timeAgo: '9h',
+        likes: 3700,
+        reposts: 182,
+        comments: [
+          PostComment(user: norahStars, text: 'تصوير رهيب!', timeAgo: '8h'),
+          PostComment(user: khaledAstro, text: 'العلا دايم سماها صافية', timeAgo: '7h'),
+          PostComment(user: sarahMoon, text: 'لازم أزورها قريب', timeAgo: '6h'),
+        ],
+        location: 'AlUla, Saudi Arabia',
+        bortleClass: 2,
+        likedBy: ['2', '3', '4'],
+        createdAt: DateTime.now().subtract(const Duration(hours: 9)),
+      ),
+      SkyPost(
+        id: 'local_2',
+        user: norahStars,
+        caption: 'التقاطات اليوم للسماء الجميله',
+        imageAssets: ['desert_stars', 'orion_nebula'],
+        imageUrls: [],
+        timeAgo: '30m',
+        likes: 3700,
+        reposts: 95,
+        comments: [
+          PostComment(user: ahmedSky, text: 'الربع الخالي كنز فلكي', timeAgo: '11h'),
+          PostComment(user: lailaGalaxy, text: 'تصوير احترافي', timeAgo: '10h'),
+        ],
+        location: 'Empty Quarter, Saudi Arabia',
+        bortleClass: 1,
+        likedBy: ['1', '5'],
+        createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+      ),
+      SkyPost(
+        id: 'local_3',
+        user: khaledAstro,
+        caption: 'تصوير اليوم للسماء الربع الخالي',
+        imageAssets: ['desert_stars'],
+        imageUrls: [],
+        timeAgo: '5d',
+        likes: 1200,
+        reposts: 44,
+        comments: [
+          PostComment(user: faisalNebula, text: 'ايش نوع التلسكوب؟', timeAgo: '23h'),
+          PostComment(user: khaledAstro, text: 'Celestron NexStar 8SE', timeAgo: '22h'),
+        ],
+        location: 'Hail, Saudi Arabia',
+        bortleClass: 3,
+        likedBy: ['7'],
+        createdAt: DateTime.now().subtract(const Duration(days: 5)),
+      ),
+      SkyPost(
+        id: 'local_4',
+        user: sarahMoon,
+        caption: 'القمر الليلة من شقتي في الرياض. حتى مع التلوث الضوئي القمر دايم يبهرني',
+        imageAssets: ['moon_city'],
+        imageUrls: [],
+        timeAgo: '1d',
+        likes: 890,
+        reposts: 8,
+        comments: [
+          PostComment(user: norahStars, text: 'القمر ما يحتاج سماء صافية عشان يكون جميل', timeAgo: '24h'),
+        ],
+        location: 'Riyadh, Saudi Arabia',
+        bortleClass: 7,
+        likedBy: [],
+        createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 6)),
+      ),
+      SkyPost(
+        id: 'local_5',
+        user: ahmedSky,
+        caption: 'مقارنة سماء المدينة مع سماء الصحراء. الفرق واضح! التلوث الضوئي مشكلة حقيقية تحتاج حلول',
+        imageAssets: ['comparison', 'desert_stars'],
+        imageUrls: [],
+        timeAgo: '2d',
+        likes: 5400,
+        reposts: 312,
+        comments: [
+          PostComment(user: suraOfficial, text: 'محتوى توعوي مهم! شكراً أحمد', timeAgo: '2d'),
+          PostComment(user: lailaGalaxy, text: 'لازم ننشر الوعي أكثر', timeAgo: '2d'),
+          PostComment(user: ranaComet, text: 'الفرق صادم فعلاً', timeAgo: '1d'),
+        ],
+        location: null,
+        bortleClass: null,
+        likedBy: ['1', '6', '8'],
+        createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+      SkyPost(
+        id: 'local_6',
+        user: lailaGalaxy,
+        caption: 'درب التبانة فوق البحر الأحمر. رحلة ليلية لا تُنسى مع الأصدقاء',
+        imageAssets: ['milky_way', 'alula_sky'],
+        imageUrls: [],
+        timeAgo: '2d',
+        likes: 2100,
+        reposts: 31,
+        comments: [
+          PostComment(user: sarahMoon, text: 'محظوظة! وين بالضبط في ينبع؟', timeAgo: '2d'),
+          PostComment(user: lailaGalaxy, text: 'شرم ينبع بعيد عن أضواء المدينة', timeAgo: '2d'),
+        ],
+        location: 'Yanbu, Saudi Arabia',
+        bortleClass: 3,
+        likedBy: ['4'],
+        createdAt: DateTime.now().subtract(const Duration(days: 2, hours: 4)),
+      ),
+      SkyPost(
+        id: 'local_7',
+        user: faisalNebula,
+        caption: 'أول زيارة لمحمية العلا للسماء المظلمة. تلوث ضوئي ٥٪ فقط! المكان سحري',
+        imageAssets: ['alula_sky'],
+        imageUrls: [],
+        timeAgo: '3d',
+        likes: 1800,
+        reposts: 22,
+        comments: [
+          PostComment(user: ahmedSky, text: 'من أفضل الأماكن في المملكة للرصد', timeAgo: '3d'),
+          PostComment(user: suraOfficial, text: 'العلا وجهة فلكية عالمية', timeAgo: '3d'),
+        ],
+        location: 'AlUla Dark Sky Reserve',
+        bortleClass: 2,
+        likedBy: ['5', '1'],
+        createdAt: DateTime.now().subtract(const Duration(days: 3)),
+      ),
+      SkyPost(
+        id: 'local_8',
+        user: ranaComet,
+        caption: 'أول محاولة لي في تصوير النجوم! مو مثالية بس الحماس حقيقي. أي نصائح للمبتدئين؟',
+        imageAssets: ['beginner_sky'],
+        imageUrls: [],
+        timeAgo: '3d',
+        likes: 450,
+        reposts: 12,
+        comments: [
+          PostComment(user: norahStars, text: 'بداية رائعة! جربي تزيدي وقت التعريض', timeAgo: '3d'),
+          PostComment(user: khaledAstro, text: 'استخدمي حامل ثابت وجربي ١٥-٢٠ ثانية تعريض', timeAgo: '3d'),
+          PostComment(user: faisalNebula, text: 'تطبيق PhotoPills يساعدك تحددي موقع درب التبانة', timeAgo: '2d'),
+          PostComment(user: sarahMoon, text: 'أحسنتي! كملي', timeAgo: '2d'),
+        ],
+        location: 'Abha, Saudi Arabia',
+        bortleClass: 4,
+        likedBy: [],
+        createdAt: DateTime.now().subtract(const Duration(days: 3, hours: 8)),
+      ),
+    ];
   }
 }
