@@ -6,6 +6,8 @@ import 'features/map/pages/map_page.dart';
 import 'features/analysis/pages/analysis_page.dart';
 import 'features/community/pages/community_page.dart';
 import 'features/common/pages/placeholder_page.dart';
+import 'features/search/pages/search_page.dart';
+import 'features/chat/pages/chat_list_page.dart';
 import 'features/common/pages/splash_page.dart';
 import 'features/community/pages/profile_page.dart';
 import 'features/reserve/pages/reserve_page.dart';
@@ -74,15 +76,12 @@ final appRouter = GoRouter(
             ),
           ],
         ),
-        // Search (placeholder)
+        // Search
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/search',
-              builder: (context, state) => const PlaceholderPage(
-                titleKey: PlaceholderTitle.search,
-                icon: Icons.search,
-              ),
+              builder: (context, state) => const SearchPage(),
             ),
           ],
         ),
@@ -104,15 +103,12 @@ final appRouter = GoRouter(
             ),
           ],
         ),
-        // Chat (placeholder)
+        // Chat (DMs)
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: '/chat',
-              builder: (context, state) => const PlaceholderPage(
-                titleKey: PlaceholderTitle.chat,
-                icon: Icons.chat_bubble_outline,
-              ),
+              builder: (context, state) => const ChatListPage(),
             ),
           ],
         ),
