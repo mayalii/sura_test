@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../../community/models/community_models.dart';
 import '../../community/models/mock_data.dart';
 import '../models/chat_models.dart';
-import '../models/mock_chats.dart';
+import '../providers/chat_provider.dart';
 import 'chat_detail_page.dart';
 
-class ChatListPage extends StatefulWidget {
+class ChatListPage extends ConsumerStatefulWidget {
   const ChatListPage({super.key});
 
   @override
-  State<ChatListPage> createState() => _ChatListPageState();
+  ConsumerState<ChatListPage> createState() => _ChatListPageState();
 }
 
-class _ChatListPageState extends State<ChatListPage> {
+class _ChatListPageState extends ConsumerState<ChatListPage> {
   final _searchController = TextEditingController();
   String _query = '';
-  late List<Conversation> _conversations;
-
-  @override
-  void initState() {
-    super.initState();
-    _conversations = MockChats.getConversations();
-  }
 
   @override
   void dispose() {
@@ -31,17 +26,20 @@ class _ChatListPageState extends State<ChatListPage> {
     super.dispose();
   }
 
-  List<Conversation> get _filteredConversations {
-    if (_query.isEmpty) return _conversations;
+  List<Conversation> _filterConversations(List<Conversation> conversations) {
+    if (_query.isEmpty) return conversations;
     final q = _query.toLowerCase();
-    return _conversations.where((c) {
+    return conversations.where((c) {
       return c.otherUser.name.toLowerCase().contains(q) ||
           c.otherUser.username.toLowerCase().contains(q) ||
-          c.lastMessage.text.toLowerCase().contains(q);
+          (c.messages.isNotEmpty && c.lastMessage.text.toLowerCase().contains(q));
     }).toList();
   }
 
   void _showNewMessageSheet(BuildContext context) {
+    final uid = ref.read(authStateProvider).valueOrNull?.uid ?? '';
+    final firestore = ref.read(firestoreServiceProvider);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -52,23 +50,17 @@ class _ChatListPageState extends State<ChatListPage> {
         maxChildSize: 0.9,
         builder: (ctx, scrollController) => _NewMessageSheet(
           scrollController: scrollController,
-          onUserSelected: (user) {
+          onUserSelected: (user) async {
             Navigator.pop(ctx);
-            final newConv = Conversation(
-              id: 'new_${user.id}',
-              otherUser: user,
-              messages: [
-                ChatMessage(
-                  id: 'placeholder',
-                  text: '',
-                  senderId: user.id,
-                  timestamp: DateTime.now(),
-                ),
-              ],
-            );
+            // Create or get conversation in Firestore
+            final convId = await firestore.getOrCreateConversation(uid, user.id);
+            if (!mounted) return;
             Navigator.of(context, rootNavigator: true).push(
               MaterialPageRoute(
-                builder: (_) => ChatDetailPage(conversation: newConv),
+                builder: (_) => ChatDetailPage(
+                  conversationId: convId,
+                  otherUser: user,
+                ),
               ),
             );
           },
@@ -80,8 +72,8 @@ class _ChatListPageState extends State<ChatListPage> {
   @override
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
-    final filtered = _filteredConversations;
     final c = context.colors;
+    final conversationsAsync = ref.watch(conversationsProvider);
 
     return Scaffold(
       backgroundColor: c.surface,
@@ -182,8 +174,17 @@ class _ChatListPageState extends State<ChatListPage> {
 
           // Conversations list
           Expanded(
-            child: filtered.isEmpty
-                ? Center(
+            child: conversationsAsync.when(
+              loading: () => Center(
+                child: CircularProgressIndicator(color: c.accent),
+              ),
+              error: (_, __) => Center(
+                child: Text('Failed to load messages', style: font(color: c.textSecondary)),
+              ),
+              data: (conversations) {
+                final filtered = _filterConversations(conversations);
+                if (filtered.isEmpty) {
+                  return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -195,32 +196,34 @@ class _ChatListPageState extends State<ChatListPage> {
                         ),
                       ],
                     ),
-                  )
-                : ListView.separated(
-                    itemCount: filtered.length,
-                    separatorBuilder: (_, __) => Divider(
-                      height: 1,
-                      indent: 76,
-                      color: c.divider,
-                    ),
-                    itemBuilder: (context, index) {
-                      final conv = filtered[index];
-                      return _ConversationTile(
-                        conversation: conv,
-                        onTap: () async {
-                          await Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                              builder: (_) => ChatDetailPage(conversation: conv),
-                            ),
-                          );
-                          // Refresh list when coming back
-                          setState(() {
-                            _conversations = MockChats.getConversations();
-                          });
-                        },
-                      );
-                    },
+                  );
+                }
+                return ListView.separated(
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, __) => Divider(
+                    height: 1,
+                    indent: 76,
+                    color: c.divider,
                   ),
+                  itemBuilder: (context, index) {
+                    final conv = filtered[index];
+                    return _ConversationTile(
+                      conversation: conv,
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                            builder: (_) => ChatDetailPage(
+                              conversationId: conv.id,
+                              otherUser: conv.otherUser,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -424,8 +427,9 @@ class _ConversationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
     final user = conversation.otherUser;
-    final lastMsg = conversation.lastMessage;
     final hasUnread = conversation.unreadCount > 0;
+    final hasMessages = conversation.messages.isNotEmpty;
+    final lastMsg = hasMessages ? conversation.lastMessage : null;
     final c = context.colors;
 
     return InkWell(
@@ -483,44 +487,46 @@ class _ConversationTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          lastMsg.text,
-                          style: font(
-                            color: hasUnread ? c.textPrimary : c.textSecondary,
-                            fontSize: 14,
-                            fontWeight: hasUnread ? FontWeight.w500 : FontWeight.w400,
+                  if (lastMsg != null) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            lastMsg.text,
+                            style: font(
+                              color: hasUnread ? c.textPrimary : c.textSecondary,
+                              fontSize: 14,
+                              fontWeight: hasUnread ? FontWeight.w500 : FontWeight.w400,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      if (hasUnread) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: const BoxDecoration(
-                            color: AppColors.navy,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${conversation.unreadCount}',
-                              style: font(
-                                color: AppColors.white,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
+                        if (hasUnread) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: const BoxDecoration(
+                              color: AppColors.navy,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${conversation.unreadCount}',
+                                style: font(
+                                  color: AppColors.white,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
-                  ),
+                    ),
+                  ],
                 ],
               ),
             ),

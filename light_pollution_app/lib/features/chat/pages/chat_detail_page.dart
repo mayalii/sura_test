@@ -1,31 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../auth/providers/auth_provider.dart';
+import '../../community/models/community_models.dart';
 import '../models/chat_models.dart';
-import '../models/mock_chats.dart';
+import '../providers/chat_provider.dart';
 
-class ChatDetailPage extends StatefulWidget {
-  const ChatDetailPage({super.key, required this.conversation});
+class ChatDetailPage extends ConsumerStatefulWidget {
+  const ChatDetailPage({
+    super.key,
+    required this.conversationId,
+    required this.otherUser,
+  });
 
-  final Conversation conversation;
+  final String conversationId;
+  final MockUser otherUser;
 
   @override
-  State<ChatDetailPage> createState() => _ChatDetailPageState();
+  ConsumerState<ChatDetailPage> createState() => _ChatDetailPageState();
 }
 
-class _ChatDetailPageState extends State<ChatDetailPage> {
+class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
-  late List<ChatMessage> _messages;
 
   @override
   void initState() {
     super.initState();
-    _messages = widget.conversation.messages;
     // Mark conversation as read when opened
-    widget.conversation.markAsRead();
-    MockChats.updateConversation(widget.conversation);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final uid = ref.read(authStateProvider).valueOrNull?.uid ?? '';
+      if (uid.isNotEmpty) {
+        ref.read(firestoreServiceProvider).markConversationRead(
+              widget.conversationId,
+              uid,
+            );
+      }
+    });
   }
 
   @override
@@ -45,22 +57,21 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
   }
 
-  void _sendMessage() {
+  Future<void> _sendMessage() async {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
-    final msg = ChatMessage(
-      id: 'new_${_messages.length}',
-      text: text,
-      senderId: 'me',
-      timestamp: DateTime.now(),
-    );
+    final uid = ref.read(authStateProvider).valueOrNull?.uid ?? '';
+    if (uid.isEmpty) return;
 
-    setState(() {
-      widget.conversation.addMessage(msg);
-    });
-    MockChats.updateConversation(widget.conversation);
     _messageController.clear();
+
+    await ref.read(firestoreServiceProvider).sendMessage(
+          widget.conversationId,
+          uid,
+          text,
+          widget.otherUser.id,
+        );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
@@ -68,8 +79,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
-    final user = widget.conversation.otherUser;
+    final user = widget.otherUser;
     final c = context.colors;
+    final uid = ref.watch(authStateProvider).valueOrNull?.uid ?? '';
+    final messagesAsync = ref.watch(messagesProvider(widget.conversationId));
 
     return Scaffold(
       backgroundColor: c.background,
@@ -143,21 +156,45 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
           // Messages
           Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final msg = _messages[index];
-                final isMe = msg.senderId == 'me';
-                final showAvatar = !isMe &&
-                    (index == 0 || _messages[index - 1].senderId == 'me');
+            child: messagesAsync.when(
+              loading: () => Center(
+                child: CircularProgressIndicator(color: c.accent),
+              ),
+              error: (_, _) => Center(
+                child: Text('Failed to load messages',
+                    style: font(color: c.textSecondary)),
+              ),
+              data: (messages) {
+                WidgetsBinding.instance
+                    .addPostFrameCallback((_) => _scrollToBottom());
 
-                return _MessageBubble(
-                  message: msg,
-                  isMe: isMe,
-                  showAvatar: showAvatar,
-                  user: user,
+                if (messages.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No messages yet. Say hello!',
+                      style: font(color: c.textHint, fontSize: 15),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  controller: _scrollController,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = messages[index];
+                    final isMe = msg.senderId == uid;
+                    final showAvatar = !isMe &&
+                        (index == 0 || messages[index - 1].senderId == uid);
+
+                    return _MessageBubble(
+                      message: msg,
+                      isMe: isMe,
+                      showAvatar: showAvatar,
+                      user: user,
+                    );
+                  },
                 );
               },
             ),
@@ -183,7 +220,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   icon: Icon(Icons.image_outlined, color: c.accent, size: 24),
                   onPressed: () {},
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                  constraints:
+                      const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
                 const SizedBox(width: 4),
                 Expanded(
@@ -204,7 +242,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                             textInputAction: TextInputAction.newline,
                             decoration: InputDecoration(
                               hintText: 'Start a new message',
-                              hintStyle: font(fontSize: 15, color: c.textHint),
+                              hintStyle:
+                                  font(fontSize: 15, color: c.textHint),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -222,7 +261,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   icon: Icon(Icons.send_rounded, color: c.accent, size: 24),
                   onPressed: _sendMessage,
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                  constraints:
+                      const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
               ],
             ),
@@ -244,7 +284,7 @@ class _MessageBubble extends StatelessWidget {
   final ChatMessage message;
   final bool isMe;
   final bool showAvatar;
-  final dynamic user;
+  final MockUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +294,8 @@ class _MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
-        mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isMe) ...[
@@ -277,7 +318,8 @@ class _MessageBubble extends StatelessWidget {
           ],
           Flexible(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 color: isMe ? AppColors.navy : c.card,
                 borderRadius: BorderRadius.only(

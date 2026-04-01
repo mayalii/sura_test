@@ -133,4 +133,88 @@ class FirestoreService {
   Future<void> updatePost(String postId, Map<String, dynamic> data) async {
     await _db.collection('posts').doc(postId).update(data);
   }
+
+  // ── Chat / Conversations ─────────────────────────────
+
+  /// Stream all conversations the current user is part of.
+  Stream<QuerySnapshot> conversationsStream(String uid) {
+    return _db
+        .collection('conversations')
+        .where('participants', arrayContains: uid)
+        .orderBy('lastMessageTimestamp', descending: true)
+        .snapshots();
+  }
+
+  /// Stream messages in a conversation, ordered oldest-first.
+  Stream<QuerySnapshot> messagesStream(String conversationId) {
+    return _db
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .orderBy('timestamp', descending: false)
+        .snapshots();
+  }
+
+  /// Create or get existing conversation between two users.
+  Future<String> getOrCreateConversation(String uid1, String uid2) async {
+    // Check if conversation already exists
+    final existing = await _db
+        .collection('conversations')
+        .where('participants', arrayContains: uid1)
+        .get();
+
+    for (final doc in existing.docs) {
+      final participants = List<String>.from(doc.data()['participants'] ?? []);
+      if (participants.contains(uid2)) {
+        return doc.id;
+      }
+    }
+
+    // Create new conversation
+    final ref = await _db.collection('conversations').add({
+      'participants': [uid1, uid2],
+      'lastMessageText': '',
+      'lastMessageSenderId': '',
+      'lastMessageTimestamp': FieldValue.serverTimestamp(),
+      'unreadCount_$uid1': 0,
+      'unreadCount_$uid2': 0,
+    });
+    return ref.id;
+  }
+
+  /// Send a message in a conversation.
+  Future<void> sendMessage(String conversationId, String senderId, String text, String otherUid) async {
+    final batch = _db.batch();
+
+    // Add message to subcollection
+    final msgRef = _db
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .doc();
+    batch.set(msgRef, {
+      'text': text,
+      'senderId': senderId,
+      'timestamp': FieldValue.serverTimestamp(),
+      'isRead': false,
+    });
+
+    // Update conversation metadata
+    final convRef = _db.collection('conversations').doc(conversationId);
+    batch.update(convRef, {
+      'lastMessageText': text,
+      'lastMessageSenderId': senderId,
+      'lastMessageTimestamp': FieldValue.serverTimestamp(),
+      'unreadCount_$otherUid': FieldValue.increment(1),
+    });
+
+    await batch.commit();
+  }
+
+  /// Mark all messages in a conversation as read for the given user.
+  Future<void> markConversationRead(String conversationId, String uid) async {
+    await _db.collection('conversations').doc(conversationId).update({
+      'unreadCount_$uid': 0,
+    });
+  }
 }
