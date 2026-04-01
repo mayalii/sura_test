@@ -69,12 +69,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
     final user = widget.conversation.otherUser;
+    final c = context.colors;
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.background,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.navy),
+          icon: Icon(Icons.arrow_back, color: c.accent),
           onPressed: () => Navigator.pop(context),
         ),
         titleSpacing: 0,
@@ -103,7 +104,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         child: Text(
                           user.name,
                           style: font(
-                            color: AppColors.textPrimary,
+                            color: c.textPrimary,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
@@ -112,13 +113,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       ),
                       if (user.isVerified) ...[
                         const SizedBox(width: 4),
-                        Icon(Icons.verified, color: AppColors.navy, size: 14),
+                        Icon(Icons.verified, color: c.accent, size: 14),
                       ],
                     ],
                   ),
                   Text(
                     user.username,
-                    style: font(color: AppColors.textSecondary, fontSize: 12),
+                    style: font(color: c.textSecondary, fontSize: 12),
                   ),
                 ],
               ),
@@ -127,14 +128,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.info_outline, color: AppColors.navy, size: 22),
-            onPressed: () {},
+            icon: Icon(Icons.info_outline, color: c.accent, size: 22),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${user.name} - ${user.username}')),
+              );
+            },
           ),
         ],
       ),
       body: Column(
         children: [
-          const Divider(height: 1, color: AppColors.divider),
+          Divider(height: 1, color: c.divider),
 
           // Messages
           Expanded(
@@ -161,9 +166,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           // Input bar
           Container(
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: c.surface,
               border: Border(
-                top: BorderSide(color: AppColors.divider, width: 0.5),
+                top: BorderSide(color: c.divider, width: 0.5),
               ),
             ),
             padding: EdgeInsets.only(
@@ -175,7 +180,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.image_outlined, color: AppColors.navy, size: 24),
+                  icon: Icon(Icons.image_outlined, color: c.accent, size: 24),
                   onPressed: () {},
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
@@ -184,22 +189,22 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.background,
+                      color: c.background,
                       borderRadius: BorderRadius.circular(22),
-                      border: Border.all(color: AppColors.divider),
+                      border: Border.all(color: c.divider),
                     ),
                     child: Row(
                       children: [
                         Expanded(
                           child: TextField(
                             controller: _messageController,
-                            style: font(fontSize: 15, color: AppColors.textPrimary),
+                            style: font(fontSize: 15, color: c.textPrimary),
                             maxLines: 4,
                             minLines: 1,
                             textInputAction: TextInputAction.newline,
                             decoration: InputDecoration(
                               hintText: 'Start a new message',
-                              hintStyle: font(fontSize: 15, color: AppColors.textHint),
+                              hintStyle: font(fontSize: 15, color: c.textHint),
                               border: InputBorder.none,
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -214,7 +219,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 ),
                 const SizedBox(width: 4),
                 IconButton(
-                  icon: Icon(Icons.send_rounded, color: AppColors.navy, size: 24),
+                  icon: Icon(Icons.send_rounded, color: c.accent, size: 24),
                   onPressed: _sendMessage,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
@@ -244,6 +249,7 @@ class _MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
+    final c = context.colors;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
@@ -273,7 +279,7 @@ class _MessageBubble extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: isMe ? AppColors.navy : AppColors.background,
+                color: isMe ? AppColors.navy : c.card,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(18),
                   topRight: const Radius.circular(18),
@@ -284,7 +290,7 @@ class _MessageBubble extends StatelessWidget {
               child: Text(
                 message.text,
                 style: font(
-                  color: isMe ? AppColors.white : AppColors.textPrimary,
+                  color: isMe ? AppColors.white : c.textPrimary,
                   fontSize: 15,
                 ),
               ),

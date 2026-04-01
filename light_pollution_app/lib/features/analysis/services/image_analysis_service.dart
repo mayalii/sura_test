@@ -74,11 +74,17 @@ class ImageAnalysisService {
       }
     }
 
+    if (totalPixels == 0) {
+      throw Exception('Image has no pixels to analyze');
+    }
+
     final meanBrightness = totalBrightness / totalPixels;
 
     // Median brightness
     brightnesses.sort();
-    final medianBrightness = brightnesses[brightnesses.length ~/ 2];
+    final medianBrightness = brightnesses.isNotEmpty
+        ? brightnesses[brightnesses.length ~/ 2]
+        : 0.0;
 
     // Standard deviation
     double sumSquaredDiff = 0;

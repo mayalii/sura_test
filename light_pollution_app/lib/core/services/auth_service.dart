@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -20,27 +21,30 @@ class AuthService {
       password: password,
     );
 
-    final uid = credential.user!.uid;
-    final initials = name.trim().split(' ').map((w) => w[0]).take(2).join().toUpperCase();
-    final isMai = name.trim().toLowerCase() == 'mai';
+    final user = credential.user;
+    if (user == null) throw Exception('Sign-up succeeded but user is null');
+
+    final uid = user.uid;
+    final words = name.trim().split(' ').where((w) => w.isNotEmpty).toList();
+    final initials = words.map((w) => w[0]).take(2).join().toUpperCase();
 
     await _firestore.collection('users').doc(uid).set({
       'name': name,
       'username': '@$username',
       'avatarInitials': initials,
-      'bio': isMai ? 'Astrophotographer & trip organizer. Exploring the darkest skies of Saudi Arabia.' : '',
-      'isVerified': isMai,
-      'isPremium': isMai,
+      'bio': '',
+      'isVerified': false,
+      'isPremium': false,
       'avatarUrl': null,
       'bannerUrl': null,
       'createdAt': FieldValue.serverTimestamp(),
     });
 
+    // Grant premium if this email is in the premium list
+    await _grantPremiumIfEligible(email, uid);
+
     return credential;
   }
-
-  /// Premium user emails — these accounts get isPremium + isVerified on login.
-  static const _premiumEmails = {'maiali66m@gmail.com'};
 
   Future<UserCredential> signIn({
     required String email,
@@ -51,16 +55,11 @@ class AuthService {
       password: password,
     );
 
+    final user = credential.user;
+    if (user == null) throw Exception('Sign-in succeeded but user is null');
+
     // Grant premium to designated accounts (don't block login if this fails)
-    try {
-      if (_premiumEmails.contains(email.trim().toLowerCase())) {
-        final uid = credential.user!.uid;
-        await _firestore.collection('users').doc(uid).set({
-          'isPremium': true,
-          'isVerified': true,
-        }, SetOptions(merge: true));
-      }
-    } catch (_) {}
+    await _grantPremiumIfEligible(email, user.uid);
 
     return credential;
   }
@@ -71,14 +70,47 @@ class AuthService {
       final user = _auth.currentUser;
       if (user == null) return;
       final email = user.email?.trim().toLowerCase() ?? '';
-      if (_premiumEmails.contains(email)) {
-        await _firestore.collection('users').doc(user.uid).set({
+      await _grantPremiumIfEligible(email, user.uid);
+    } catch (e) {
+      debugPrint('Failed to ensure premium status: $e');
+    }
+  }
+
+  /// Check if [email] is in the premium list and grant premium + verified.
+  /// Premium emails are stored in the Firestore `config/premium` document.
+  /// Falls back to a hardcoded list if the config document doesn't exist.
+  Future<void> _grantPremiumIfEligible(String email, String uid) async {
+    try {
+      final normalizedEmail = email.trim().toLowerCase();
+
+      // Try to read premium emails from Firestore config
+      Set<String> premiumEmails;
+      try {
+        final configDoc = await _firestore.collection('config').doc('premium').get();
+        if (configDoc.exists && configDoc.data()?['emails'] != null) {
+          premiumEmails = Set<String>.from(
+            (configDoc.data()!['emails'] as List).map((e) => e.toString().trim().toLowerCase()),
+          );
+        } else {
+          premiumEmails = _fallbackPremiumEmails;
+        }
+      } catch (_) {
+        premiumEmails = _fallbackPremiumEmails;
+      }
+
+      if (premiumEmails.contains(normalizedEmail)) {
+        await _firestore.collection('users').doc(uid).set({
           'isPremium': true,
           'isVerified': true,
         }, SetOptions(merge: true));
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Failed to grant premium status: $e');
+    }
   }
+
+  /// Fallback premium emails when Firestore config is unavailable.
+  static const _fallbackPremiumEmails = {'maiali66m@gmail.com'};
 
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);

@@ -5,7 +5,6 @@ import 'features/home/pages/home_page.dart';
 import 'features/map/pages/map_page.dart';
 import 'features/analysis/pages/analysis_page.dart';
 import 'features/community/pages/community_page.dart';
-import 'features/common/pages/placeholder_page.dart';
 import 'features/search/pages/search_page.dart';
 import 'features/chat/pages/chat_list_page.dart';
 import 'features/common/pages/splash_page.dart';
@@ -17,8 +16,13 @@ import 'features/auth/pages/signup_page.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class _AuthNotifier extends ChangeNotifier {
-  _AuthNotifier() {
-    FirebaseAuth.instance.authStateChanges().listen((_) => notifyListeners());
+  late final _subscription =
+      FirebaseAuth.instance.authStateChanges().listen((_) => notifyListeners());
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }
 

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:light_pollution_app/l10n/app_localizations.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../core/theme/app_theme.dart';
 import '../models/community_models.dart';
 
@@ -12,17 +13,20 @@ class SkyPostCard extends StatelessWidget {
     required this.onLike,
     required this.onComment,
     this.onDelete,
+    this.onUserTap,
   });
 
   final SkyPost post;
   final VoidCallback onLike;
   final VoidCallback onComment;
   final VoidCallback? onDelete;
+  final VoidCallback? onUserTap;
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Container(
-      color: AppColors.white,
+      color: c.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,20 +37,23 @@ class SkyPostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Avatar
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.navy,
-                  ),
-                  child: Center(
-                    child: Text(
-                      post.user.avatarInitials,
-                      style: AppFonts.style(context)(
-                        color: AppColors.white,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
+                GestureDetector(
+                  onTap: onUserTap,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.navy,
+                    ),
+                    child: Center(
+                      child: Text(
+                        post.user.avatarInitials,
+                        style: AppFonts.style(context)(
+                          color: AppColors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
@@ -69,7 +76,7 @@ class SkyPostCard extends StatelessWidget {
                                     post.user.name,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppFonts.style(context)(
-                                      color: AppColors.textPrimary,
+                                      color: c.textPrimary,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -77,7 +84,7 @@ class SkyPostCard extends StatelessWidget {
                                 ),
                                 if (post.user.isVerified) ...[
                                   const SizedBox(width: 3),
-                                  const Icon(Icons.verified, color: AppColors.navy, size: 16),
+                                  Icon(Icons.verified, color: c.accent, size: 16),
                                 ],
                                 const SizedBox(width: 4),
                                 Flexible(
@@ -85,7 +92,7 @@ class SkyPostCard extends StatelessWidget {
                                     post.user.username,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppFonts.style(context)(
-                                      color: AppColors.textSecondary,
+                                      color: c.textSecondary,
                                       fontSize: 13,
                                     ),
                                   ),
@@ -96,7 +103,7 @@ class SkyPostCard extends StatelessWidget {
                           Text(
                             ' · ${post.timeAgo}',
                             style: AppFonts.style(context)(
-                              color: AppColors.textSecondary,
+                              color: c.textSecondary,
                               fontSize: 13,
                             ),
                           ),
@@ -106,7 +113,7 @@ class SkyPostCard extends StatelessWidget {
                               onTap: () {
                                 showModalBottomSheet(
                                   context: context,
-                                  backgroundColor: AppColors.white,
+                                  backgroundColor: c.surface,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                                   ),
@@ -132,7 +139,7 @@ class SkyPostCard extends StatelessWidget {
                                   ),
                                 );
                               },
-                              child: const Icon(Icons.more_horiz, color: AppColors.textSecondary, size: 18),
+                              child: Icon(Icons.more_horiz, color: c.textSecondary, size: 18),
                             ),
                         ],
                       ),
@@ -142,7 +149,7 @@ class SkyPostCard extends StatelessWidget {
                       Text(
                         post.caption,
                         style: AppFonts.style(context)(
-                          color: AppColors.textPrimary,
+                          color: c.textPrimary,
                           fontSize: 14,
                           height: 1.45,
                         ),
@@ -168,27 +175,37 @@ class SkyPostCard extends StatelessWidget {
                           children: [
                             _ActionButton(
                               icon: Icons.chat_bubble_outline,
-                              color: AppColors.textSecondary,
+                              color: c.textSecondary,
                               label: formatCount(post.comments.length),
                               onTap: onComment,
                             ),
                             _ActionButton(
                               icon: Icons.repeat,
-                              color: AppColors.textSecondary,
+                              color: c.textSecondary,
                               label: formatCount(post.reposts),
-                              onTap: () {},
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(AppLocalizations.of(context)!.repost),
+                                    duration: const Duration(seconds: 1),
+                                  ),
+                                );
+                              },
                             ),
                             _ActionButton(
                               icon: post.isLiked ? Icons.favorite : Icons.favorite_border,
-                              color: post.isLiked ? Colors.redAccent : AppColors.textSecondary,
+                              color: post.isLiked ? Colors.redAccent : c.textSecondary,
                               label: formatCount(post.likes),
                               onTap: onLike,
                             ),
                             GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
+                              onTap: () {
+                                final text = '${post.user.name}: ${post.caption}';
+                                Share.share(text);
+                              },
+                              child: Icon(
                                 Icons.ios_share_outlined,
-                                color: AppColors.textSecondary,
+                                color: c.textSecondary,
                                 size: 18,
                               ),
                             ),
@@ -274,7 +291,7 @@ class _ActionButton extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               label,
-              style: AppFonts.style(context)(color: AppColors.textSecondary, fontSize: 12),
+              style: AppFonts.style(context)(color: context.colors.textSecondary, fontSize: 12),
             ),
           ],
         ],
@@ -328,6 +345,7 @@ class _NetworkImageSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     if (imageUrls.length == 1) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(14),
@@ -340,16 +358,16 @@ class _NetworkImageSection extends StatelessWidget {
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
               return Container(
-                color: AppColors.cardBg,
-                child: const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.navy),
+                color: c.card,
+                child: Center(
+                  child: CircularProgressIndicator(strokeWidth: 2, color: c.accent),
                 ),
               );
             },
             errorBuilder: (context, error, stackTrace) {
               return Container(
-                color: AppColors.cardBg,
-                child: const Center(child: Icon(Icons.broken_image, color: AppColors.textHint)),
+                color: c.card,
+                child: Center(child: Icon(Icons.broken_image, color: c.textHint)),
               );
             },
           ),

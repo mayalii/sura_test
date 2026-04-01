@@ -1,4 +1,3 @@
-import '../../community/models/community_models.dart';
 import '../../community/models/mock_data.dart';
 import 'chat_models.dart';
 

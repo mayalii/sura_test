@@ -894,4 +894,153 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get verdictCloudy =>
       'Not suitable for stargazing. Sky is cloudy or overcast.';
+
+  @override
+  String get searchHint => 'Search users, posts, locations...';
+
+  @override
+  String get people => 'People';
+
+  @override
+  String get noUsersFound => 'No users found';
+
+  @override
+  String get noPostsFound => 'No posts found';
+
+  @override
+  String get trendingNow => 'Trending Now';
+
+  @override
+  String get astronomyNews => 'Astronomy News';
+
+  @override
+  String get seeAll => 'See all';
+
+  @override
+  String get trendingTopics => 'Trending Topics';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get accountInfo => 'Account Information';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get pushNotifications => 'Push Notifications';
+
+  @override
+  String get emailNotifications => 'Email Notifications';
+
+  @override
+  String get privacy => 'Privacy';
+
+  @override
+  String get privateAccount => 'Private Account';
+
+  @override
+  String get privateAccountDesc => 'Only approved followers can see your posts';
+
+  @override
+  String get showOnlineStatus => 'Show Online Status';
+
+  @override
+  String get allowMessages => 'Allow Messages from Everyone';
+
+  @override
+  String get display => 'Display';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceDesc => 'Light, Dark, or System default';
+
+  @override
+  String get appVersion => 'App Version';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get openSourceLicenses => 'Open Source Licenses';
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountWarning =>
+      'This will permanently delete your account and all your data. This action cannot be undone.';
+
+  @override
+  String get dangerZone => 'Danger Zone';
+
+  @override
+  String get bookmarksTitle => 'Bookmarks';
+
+  @override
+  String get noBookmarks => 'No bookmarks yet';
+
+  @override
+  String get noBookmarksDesc => 'Posts you bookmark will appear here';
+
+  @override
+  String get removeBookmark => 'Bookmark removed';
+
+  @override
+  String get sharePost => 'Share post';
+
+  @override
+  String get repost => 'Repost';
+
+  @override
+  String get bookingFailed => 'Booking failed. Please try again.';
+
+  @override
+  String get tripFull => 'This trip is fully booked.';
+
+  @override
+  String get alreadyBooked => 'You\'ve already booked this trip.';
+
+  @override
+  String get chatSettingsComingSoon => 'Chat settings coming soon';
+
+  @override
+  String get startNewMessage => 'Start a new message';
+
+  @override
+  String get messagesTitle => 'Messages';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System default';
+
+  @override
+  String get chooseTheme => 'Choose Theme';
+
+  @override
+  String get privateAccountTitle => 'This Account is Private';
+
+  @override
+  String get privateAccountMessage =>
+      'Only approved followers can see this user\'s posts and profile details.';
 }

@@ -17,17 +17,18 @@ class TripCard extends StatelessWidget {
     final font = AppFonts.style(context);
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final dateFormat = DateFormat('MMM d, yyyy', isArabic ? 'ar' : 'en');
+    final c = context.colors;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: c.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.navy.withValues(alpha: 0.08),
+              color: c.accent.withValues(alpha: 0.08),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -143,7 +144,7 @@ class TripCard extends StatelessWidget {
                   Text(
                     trip.title,
                     style: font(
-                      color: AppColors.navy,
+                      color: c.accent,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
@@ -152,12 +153,12 @@ class TripCard extends StatelessWidget {
                   // Location
                   Row(
                     children: [
-                      const Icon(Icons.location_on, size: 15, color: AppColors.textSecondary),
+                      Icon(Icons.location_on, size: 15, color: c.textSecondary),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           trip.location,
-                          style: font(color: AppColors.textSecondary, fontSize: 13),
+                          style: font(color: c.textSecondary, fontSize: 13),
                         ),
                       ),
                     ],
@@ -166,11 +167,11 @@ class TripCard extends StatelessWidget {
                   // Date
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today, size: 15, color: AppColors.textSecondary),
+                      Icon(Icons.calendar_today, size: 15, color: c.textSecondary),
                       const SizedBox(width: 4),
                       Text(
                         dateFormat.format(trip.date),
-                        style: font(color: AppColors.textSecondary, fontSize: 13),
+                        style: font(color: c.textSecondary, fontSize: 13),
                       ),
                     ],
                   ),
@@ -209,7 +210,7 @@ class TripCard extends StatelessWidget {
                                 trip.guideName,
                                 overflow: TextOverflow.ellipsis,
                                 style: font(
-                                  color: AppColors.textPrimary,
+                                  color: c.textPrimary,
                                   fontSize: 12,
                                 ),
                               ),
@@ -220,7 +221,7 @@ class TripCard extends StatelessWidget {
                             Text(
                               trip.guideRating.toString(),
                               style: font(
-                                color: AppColors.textSecondary,
+                                color: c.textSecondary,
                                 fontSize: 12,
                               ),
                             ),
@@ -233,7 +234,7 @@ class TripCard extends StatelessWidget {
                           Text(
                             '${trip.price.toInt()} ',
                             style: font(
-                              color: AppColors.navy,
+                              color: c.accent,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
@@ -242,8 +243,8 @@ class TripCard extends StatelessWidget {
                             'assets/sar_symbol.svg',
                             width: 20,
                             height: 20,
-                            colorFilter: const ColorFilter.mode(
-                              AppColors.navy,
+                            colorFilter: ColorFilter.mode(
+                              c.accent,
                               BlendMode.srcIn,
                             ),
                           ),

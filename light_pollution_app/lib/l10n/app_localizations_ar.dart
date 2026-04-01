@@ -885,4 +885,154 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get verdictCloudy =>
       'غير مناسب لرصد النجوم. السماء غائمة أو ملبدة بالغيوم.';
+
+  @override
+  String get searchHint => 'ابحث عن مستخدمين، منشورات، مواقع...';
+
+  @override
+  String get people => 'الأشخاص';
+
+  @override
+  String get noUsersFound => 'لم يتم العثور على مستخدمين';
+
+  @override
+  String get noPostsFound => 'لم يتم العثور على منشورات';
+
+  @override
+  String get trendingNow => 'الأكثر رواجاً';
+
+  @override
+  String get astronomyNews => 'أخبار الفلك';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get trendingTopics => 'المواضيع الرائجة';
+
+  @override
+  String get settingsTitle => 'الإعدادات';
+
+  @override
+  String get account => 'الحساب';
+
+  @override
+  String get accountInfo => 'معلومات الحساب';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get notifications => 'الإشعارات';
+
+  @override
+  String get pushNotifications => 'إشعارات الدفع';
+
+  @override
+  String get emailNotifications => 'إشعارات البريد الإلكتروني';
+
+  @override
+  String get privacy => 'الخصوصية';
+
+  @override
+  String get privateAccount => 'حساب خاص';
+
+  @override
+  String get privateAccountDesc =>
+      'فقط المتابعون المعتمدون يمكنهم رؤية منشوراتك';
+
+  @override
+  String get showOnlineStatus => 'إظهار حالة الاتصال';
+
+  @override
+  String get allowMessages => 'السماح بالرسائل من الجميع';
+
+  @override
+  String get display => 'العرض';
+
+  @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get appearanceDesc => 'فاتح، داكن، أو حسب النظام';
+
+  @override
+  String get appVersion => 'إصدار التطبيق';
+
+  @override
+  String get about => 'حول';
+
+  @override
+  String get termsOfService => 'شروط الخدمة';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get openSourceLicenses => 'تراخيص المصادر المفتوحة';
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get deleteAccountWarning =>
+      'سيتم حذف حسابك وجميع بياناتك نهائياً. لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get dangerZone => 'منطقة الخطر';
+
+  @override
+  String get bookmarksTitle => 'المحفوظات';
+
+  @override
+  String get noBookmarks => 'لا توجد محفوظات بعد';
+
+  @override
+  String get noBookmarksDesc => 'المنشورات التي تحفظها ستظهر هنا';
+
+  @override
+  String get removeBookmark => 'تم إزالة الحفظ';
+
+  @override
+  String get sharePost => 'مشاركة المنشور';
+
+  @override
+  String get repost => 'إعادة نشر';
+
+  @override
+  String get bookingFailed => 'فشل الحجز. حاول مرة أخرى.';
+
+  @override
+  String get tripFull => 'هذه الرحلة محجوزة بالكامل.';
+
+  @override
+  String get alreadyBooked => 'لقد حجزت هذه الرحلة بالفعل.';
+
+  @override
+  String get chatSettingsComingSoon => 'إعدادات المحادثة قريباً';
+
+  @override
+  String get startNewMessage => 'ابدأ رسالة جديدة';
+
+  @override
+  String get messagesTitle => 'الرسائل';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get themeSystem => 'حسب النظام';
+
+  @override
+  String get chooseTheme => 'اختر المظهر';
+
+  @override
+  String get privateAccountTitle => 'هذا الحساب خاص';
+
+  @override
+  String get privateAccountMessage =>
+      'فقط المتابعون المعتمدون يمكنهم رؤية منشورات وتفاصيل هذا الحساب.';
 }
