@@ -19,6 +19,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final scaffoldKey = ref.watch(homeScaffoldKeyProvider);
+    final c = context.colors;
 
     return Scaffold(
       key: scaffoldKey,
@@ -26,9 +27,9 @@ class HomePage extends ConsumerWidget {
       drawerEdgeDragWidth: 40,
       body: navigationShell,
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: AppColors.divider, width: 0.5),
+            top: BorderSide(color: c.divider, width: 0.5),
           ),
         ),
         child: NavigationBar(
@@ -41,28 +42,28 @@ class HomePage extends ConsumerWidget {
           },
           destinations: [
             NavigationDestination(
-              icon: Icon(Icons.home_outlined, color: AppColors.textSecondary),
-              selectedIcon: const Icon(Icons.home, color: AppColors.navy),
+              icon: Icon(Icons.home_outlined, color: c.textSecondary),
+              selectedIcon: Icon(Icons.home, color: c.accent),
               label: l10n.navHome,
             ),
             NavigationDestination(
-              icon: Icon(Icons.search_outlined, color: AppColors.textSecondary),
-              selectedIcon: const Icon(Icons.search, color: AppColors.navy),
+              icon: Icon(Icons.search_outlined, color: c.textSecondary),
+              selectedIcon: Icon(Icons.search, color: c.accent),
               label: l10n.navSearch,
             ),
             NavigationDestination(
-              icon: Icon(Icons.camera_alt_outlined, color: AppColors.textSecondary),
-              selectedIcon: const Icon(Icons.camera_alt, color: AppColors.navy),
+              icon: Icon(Icons.camera_alt_outlined, color: c.textSecondary),
+              selectedIcon: Icon(Icons.camera_alt, color: c.accent),
               label: l10n.navCamera,
             ),
             NavigationDestination(
-              icon: Icon(Icons.confirmation_num_outlined, color: AppColors.textSecondary),
-              selectedIcon: const Icon(Icons.confirmation_num, color: AppColors.navy),
+              icon: Icon(Icons.confirmation_num_outlined, color: c.textSecondary),
+              selectedIcon: Icon(Icons.confirmation_num, color: c.accent),
               label: l10n.navReserve,
             ),
             NavigationDestination(
-              icon: Icon(Icons.chat_bubble_outline, color: AppColors.textSecondary),
-              selectedIcon: const Icon(Icons.chat_bubble, color: AppColors.navy),
+              icon: Icon(Icons.chat_bubble_outline, color: c.textSecondary),
+              selectedIcon: Icon(Icons.chat_bubble, color: c.accent),
               label: l10n.navChat,
             ),
           ],

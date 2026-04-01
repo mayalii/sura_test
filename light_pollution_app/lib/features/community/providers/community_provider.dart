@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/firestore_service.dart';
 import '../../../core/services/storage_service.dart';
@@ -29,24 +30,37 @@ class CommunityState {
 
 final postsStreamProvider = StreamProvider<List<SkyPost>>((ref) {
   final firestoreService = ref.watch(firestoreServiceProvider);
+  final currentUid = ref.watch(authStateProvider).valueOrNull?.uid ?? '';
   final controller = StreamController<List<SkyPost>>();
   final mockPosts = MockData.localMockPosts();
+  bool hasReceivedData = false;
+
+  List<SkyPost> filterPrivatePosts(List<SkyPost> posts) {
+    return posts.where((post) {
+      // Show own posts always; hide other private users' posts
+      if (post.userId == currentUid) return true;
+      return !post.user.isPrivate;
+    }).toList();
+  }
 
   final sub = firestoreService.postsStream().listen(
     (firestorePosts) {
-      // Merge Firestore posts with local mock posts
-      controller.add([...firestorePosts, ...mockPosts]);
+      hasReceivedData = true;
+      // Merge Firestore posts with local mock posts, filter private
+      controller.add(filterPrivatePosts([...firestorePosts, ...mockPosts]));
     },
     onError: (e) {
-      // On error, just show mock data
-      controller.add(mockPosts);
+      debugPrint('Firestore posts stream error: $e');
+      if (!hasReceivedData) {
+        controller.add(filterPrivatePosts(mockPosts));
+      }
     },
   );
 
-  // If no data after 3 seconds, show mock data
+  // If no data after 3 seconds, show mock data as fallback
   Future.delayed(const Duration(seconds: 3), () {
-    if (!controller.isClosed) {
-      // This will be overridden when Firestore responds
+    if (!controller.isClosed && !hasReceivedData) {
+      controller.add(filterPrivatePosts(mockPosts));
     }
   });
 

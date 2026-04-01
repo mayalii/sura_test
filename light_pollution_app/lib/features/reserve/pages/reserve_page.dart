@@ -24,9 +24,10 @@ class ReservePage extends ConsumerWidget {
     final filteredTrips = _filterTrips(trips, currentFilter);
     final currentUser = ref.watch(currentUserProvider).valueOrNull;
     final isPremium = currentUser?.isPremium ?? false;
+    final c = context.colors;
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.surface,
       floatingActionButton: isPremium
           ? FloatingActionButton(
               heroTag: 'create_trip_fab',
@@ -45,7 +46,7 @@ class ReservePage extends ConsumerWidget {
         title: Text(
           l10n.navReserve,
           style: font(
-            color: AppColors.navy,
+            color: c.accent,
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),
@@ -66,18 +67,18 @@ class ReservePage extends ConsumerWidget {
                     label: Text(
                       _filterLabel(l10n, filter),
                       style: font(
-                        color: isSelected ? AppColors.white : AppColors.navy,
+                        color: isSelected ? AppColors.white : c.accent,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     selectedColor: AppColors.navy,
-                    backgroundColor: AppColors.cardBg,
+                    backgroundColor: c.card,
                     checkmarkColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                       side: BorderSide(
-                        color: isSelected ? AppColors.navy : AppColors.divider,
+                        color: isSelected ? c.accent : c.divider,
                       ),
                     ),
                     onSelected: (_) {
@@ -95,7 +96,7 @@ class ReservePage extends ConsumerWidget {
                     child: Text(
                       l10n.noTripsAvailable,
                       style: font(
-                        color: AppColors.textSecondary,
+                        color: c.textSecondary,
                         fontSize: 16,
                       ),
                     ),

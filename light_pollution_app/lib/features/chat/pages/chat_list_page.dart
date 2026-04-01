@@ -81,23 +81,28 @@ class _ChatListPageState extends State<ChatListPage> {
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
     final filtered = _filteredConversations;
+    final c = context.colors;
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.surface,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'Messages',
           style: font(
-            color: AppColors.navy,
+            color: c.accent,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings_outlined, color: AppColors.navy, size: 22),
-            onPressed: () {},
+            icon: Icon(Icons.settings_outlined, color: c.accent, size: 22),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Chat settings coming soon')),
+              );
+            },
           ),
         ],
       ),
@@ -134,23 +139,23 @@ class _ChatListPageState extends State<ChatListPage> {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: c.background,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.divider),
+                border: Border.all(color: c.divider),
               ),
               child: Row(
                 children: [
                   const SizedBox(width: 14),
-                  Icon(Icons.search, color: AppColors.textHint, size: 18),
+                  Icon(Icons.search, color: c.textHint, size: 18),
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       controller: _searchController,
                       onChanged: (v) => setState(() => _query = v),
-                      style: font(fontSize: 14, color: AppColors.textPrimary),
+                      style: font(fontSize: 14, color: c.textPrimary),
                       decoration: InputDecoration(
                         hintText: 'Search Direct Messages',
-                        hintStyle: font(fontSize: 14, color: AppColors.textHint),
+                        hintStyle: font(fontSize: 14, color: c.textHint),
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(vertical: 9),
@@ -165,7 +170,7 @@ class _ChatListPageState extends State<ChatListPage> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Icon(Icons.close, color: AppColors.textHint, size: 16),
+                        child: Icon(Icons.close, color: c.textHint, size: 16),
                       ),
                     ),
                 ],
@@ -173,7 +178,7 @@ class _ChatListPageState extends State<ChatListPage> {
             ),
           ),
 
-          const Divider(height: 1, color: AppColors.divider),
+          Divider(height: 1, color: c.divider),
 
           // Conversations list
           Expanded(
@@ -182,21 +187,21 @@ class _ChatListPageState extends State<ChatListPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.chat_bubble_outline, size: 48, color: AppColors.textHint),
+                        Icon(Icons.chat_bubble_outline, size: 48, color: c.textHint),
                         const SizedBox(height: 12),
                         Text(
                           'No messages found',
-                          style: font(color: AppColors.textSecondary, fontSize: 16),
+                          style: font(color: c.textSecondary, fontSize: 16),
                         ),
                       ],
                     ),
                   )
                 : ListView.separated(
                     itemCount: filtered.length,
-                    separatorBuilder: (_, __) => const Divider(
+                    separatorBuilder: (_, __) => Divider(
                       height: 1,
                       indent: 76,
-                      color: AppColors.divider,
+                      color: c.divider,
                     ),
                     itemBuilder: (context, index) {
                       final conv = filtered[index];
@@ -261,11 +266,12 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
     final users = _filteredUsers;
+    final c = context.colors;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
         children: [
@@ -275,7 +281,7 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
             width: 36,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.divider,
+              color: c.divider,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -287,14 +293,14 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
                 Text(
                   'New Message',
                   style: font(
-                    color: AppColors.navy,
+                    color: c.accent,
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const Spacer(),
                 IconButton(
-                  icon: const Icon(Icons.close, color: AppColors.textSecondary, size: 22),
+                  icon: Icon(Icons.close, color: c.textSecondary, size: 22),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -306,23 +312,23 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
             child: Container(
               height: 40,
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: c.background,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.divider),
+                border: Border.all(color: c.divider),
               ),
               child: Row(
                 children: [
                   const SizedBox(width: 14),
-                  Icon(Icons.search, color: AppColors.textHint, size: 18),
+                  Icon(Icons.search, color: c.textHint, size: 18),
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
                       controller: _searchController,
                       onChanged: (v) => setState(() => _query = v),
-                      style: font(fontSize: 14, color: AppColors.textPrimary),
+                      style: font(fontSize: 14, color: c.textPrimary),
                       decoration: InputDecoration(
                         hintText: 'Search people...',
-                        hintStyle: font(fontSize: 14, color: AppColors.textHint),
+                        hintStyle: font(fontSize: 14, color: c.textHint),
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(vertical: 9),
@@ -337,21 +343,21 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Icon(Icons.close, color: AppColors.textHint, size: 16),
+                        child: Icon(Icons.close, color: c.textHint, size: 16),
                       ),
                     ),
                 ],
               ),
             ),
           ),
-          const Divider(height: 1, color: AppColors.divider),
+          Divider(height: 1, color: c.divider),
           // User list
           Expanded(
             child: users.isEmpty
                 ? Center(
                     child: Text(
                       'No users found',
-                      style: font(color: AppColors.textSecondary, fontSize: 15),
+                      style: font(color: c.textSecondary, fontSize: 15),
                     ),
                   )
                 : ListView.builder(
@@ -378,7 +384,7 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
                               child: Text(
                                 user.name,
                                 style: font(
-                                  color: AppColors.textPrimary,
+                                  color: c.textPrimary,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -387,13 +393,13 @@ class _NewMessageSheetState extends State<_NewMessageSheet> {
                             ),
                             if (user.isVerified) ...[
                               const SizedBox(width: 4),
-                              Icon(Icons.verified, color: AppColors.navy, size: 16),
+                              Icon(Icons.verified, color: c.accent, size: 16),
                             ],
                           ],
                         ),
                         subtitle: Text(
                           user.username,
-                          style: font(color: AppColors.textSecondary, fontSize: 13),
+                          style: font(color: c.textSecondary, fontSize: 13),
                         ),
                         onTap: () => widget.onUserSelected(user),
                       );
@@ -420,6 +426,7 @@ class _ConversationTile extends StatelessWidget {
     final user = conversation.otherUser;
     final lastMsg = conversation.lastMessage;
     final hasUnread = conversation.unreadCount > 0;
+    final c = context.colors;
 
     return InkWell(
       onTap: onTap,
@@ -450,7 +457,7 @@ class _ConversationTile extends StatelessWidget {
                         child: Text(
                           user.name,
                           style: font(
-                            color: AppColors.textPrimary,
+                            color: c.textPrimary,
                             fontSize: 15,
                             fontWeight: hasUnread ? FontWeight.w700 : FontWeight.w600,
                           ),
@@ -459,18 +466,18 @@ class _ConversationTile extends StatelessWidget {
                       ),
                       if (user.isVerified) ...[
                         const SizedBox(width: 4),
-                        Icon(Icons.verified, color: AppColors.navy, size: 16),
+                        Icon(Icons.verified, color: c.accent, size: 16),
                       ],
                       const SizedBox(width: 4),
                       Text(
                         user.username,
-                        style: font(color: AppColors.textSecondary, fontSize: 13),
+                        style: font(color: c.textSecondary, fontSize: 13),
                       ),
                       const Spacer(),
                       Text(
                         conversation.lastMessageTime,
                         style: font(
-                          color: hasUnread ? AppColors.navy : AppColors.textHint,
+                          color: hasUnread ? c.accent : c.textHint,
                           fontSize: 12,
                         ),
                       ),
@@ -483,7 +490,7 @@ class _ConversationTile extends StatelessWidget {
                         child: Text(
                           lastMsg.text,
                           style: font(
-                            color: hasUnread ? AppColors.textPrimary : AppColors.textSecondary,
+                            color: hasUnread ? c.textPrimary : c.textSecondary,
                             fontSize: 14,
                             fontWeight: hasUnread ? FontWeight.w500 : FontWeight.w400,
                           ),

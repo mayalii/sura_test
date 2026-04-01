@@ -8,7 +8,9 @@ import '../../../core/theme/app_theme.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../models/community_models.dart';
 import '../pages/premium_page.dart';
+import '../pages/bookmarks_page.dart';
 import '../../reserve/pages/my_trips_page.dart';
+import '../../settings/pages/settings_page.dart';
 
 
 class AppDrawer extends ConsumerWidget {
@@ -145,7 +147,12 @@ class AppDrawer extends ConsumerWidget {
                   _DrawerItem(
                     icon: Icons.bookmark_border,
                     label: l10n.bookmarks,
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(builder: (_) => const BookmarksPage()),
+                      );
+                    },
                   ),
                   _DrawerItem(
                     icon: Icons.flight_takeoff_outlined,
@@ -166,7 +173,12 @@ class AppDrawer extends ConsumerWidget {
             _DrawerItem(
               icon: Icons.settings_outlined,
               label: l10n.settingsPrivacy,
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context, rootNavigator: true).push(
+                  MaterialPageRoute(builder: (_) => const SettingsPage()),
+                );
+              },
             ),
             _DrawerItem(
               icon: Icons.language,

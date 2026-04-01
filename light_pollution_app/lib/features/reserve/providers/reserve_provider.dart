@@ -30,24 +30,34 @@ Future<void> addTripToFirestore(StargazingTrip trip) async {
 }
 
 /// Books a trip for the current user in Firestore.
+/// Throws an exception with a message if booking fails.
 Future<void> bookTripInFirestore(String tripId, String userId) async {
   final ref = _db.collection('trips').doc(tripId);
-  await _db.runTransaction((txn) async {
-    final doc = await txn.get(ref);
-    if (!doc.exists) return;
+  try {
+    await _db.runTransaction((txn) async {
+      final doc = await txn.get(ref);
+      if (!doc.exists) throw Exception('Trip not found');
 
-    final data = doc.data()!;
-    final bookedBy = List<String>.from(data['bookedBy'] ?? []);
-    final spotsLeft = data['spotsLeft'] as int? ?? 0;
+      final data = doc.data()!;
+      final bookedBy = List<String>.from(data['bookedBy'] ?? []);
+      final spotsLeft = data['spotsLeft'] as int? ?? 0;
 
-    if (bookedBy.contains(userId) || spotsLeft <= 0) return;
+      if (bookedBy.contains(userId)) {
+        throw Exception('already_booked');
+      }
+      if (spotsLeft <= 0) {
+        throw Exception('trip_full');
+      }
 
-    bookedBy.add(userId);
-    txn.update(ref, {
-      'bookedBy': bookedBy,
-      'spotsLeft': spotsLeft - 1,
+      bookedBy.add(userId);
+      txn.update(ref, {
+        'bookedBy': bookedBy,
+        'spotsLeft': spotsLeft - 1,
+      });
     });
-  });
+  } catch (e) {
+    rethrow;
+  }
 }
 
 /// Seeds Firestore with mock trips if the 'trips' collection is empty.

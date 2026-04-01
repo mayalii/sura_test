@@ -133,6 +133,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
 
     try {
       final firestore = ref.read(firestoreServiceProvider);
+      final storage = StorageService();
       final updates = <String, dynamic>{
         'name': _nameController.text.trim(),
         'bio': _bioController.text.trim(),
@@ -141,8 +142,27 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       // Update initials
       final name = _nameController.text.trim();
       if (name.isNotEmpty) {
-        final initials = name.split(' ').map((w) => w[0]).take(2).join().toUpperCase();
+        final words = name.split(' ').where((w) => w.isNotEmpty).toList();
+        final initials = words.map((w) => w[0]).take(2).join().toUpperCase();
         updates['avatarInitials'] = initials;
+      }
+
+      // Upload avatar image if changed
+      if (_profileImage != null) {
+        final avatarUrl = await storage.uploadImage(
+          _profileImage!,
+          'users/$uid/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg',
+        );
+        updates['avatarUrl'] = avatarUrl;
+      }
+
+      // Upload banner image if changed
+      if (_bannerImage != null) {
+        final bannerUrl = await storage.uploadImage(
+          _bannerImage!,
+          'users/$uid/banner_${DateTime.now().millisecondsSinceEpoch}.jpg',
+        );
+        updates['bannerUrl'] = bannerUrl;
       }
 
       await firestore.updateUser(uid, updates);

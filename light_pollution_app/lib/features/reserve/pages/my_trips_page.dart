@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:light_pollution_app/l10n/app_localizations.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../auth/providers/auth_provider.dart';
 import '../models/trip_model.dart';
 import '../providers/reserve_provider.dart';
 import 'trip_detail_page.dart';
@@ -18,20 +17,21 @@ class MyTripsPage extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final font = AppFonts.style(context);
     final tripsAsync = ref.watch(tripsStreamProvider);
-    final currentUser = ref.watch(currentUserProvider).valueOrNull;
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final dateFormat = DateFormat('MMM d, yyyy', isArabic ? 'ar' : 'en');
 
     final allTrips = tripsAsync.valueOrNull ?? [];
     final bookedTrips = allTrips.where((t) => t.isBooked).toList();
 
+    final c = context.colors;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.background,
       appBar: AppBar(
         title: Text(
           l10n.myTripsTitle,
           style: font(
-            color: AppColors.navy,
+            color: c.accent,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
@@ -49,13 +49,13 @@ class MyTripsPage extends ConsumerWidget {
                   Icon(
                     Icons.flight_takeoff,
                     size: 64,
-                    color: AppColors.textSecondary.withValues(alpha: 0.4),
+                    color: c.textSecondary.withValues(alpha: 0.4),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     l10n.noBookedTrips,
                     style: font(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
@@ -64,7 +64,7 @@ class MyTripsPage extends ConsumerWidget {
                   Text(
                     l10n.noBookedTripsDesc,
                     style: font(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                       fontSize: 14,
                     ),
                   ),
@@ -131,16 +131,17 @@ class _BookedTripCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: c.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.navy.withValues(alpha: 0.08),
+              color: c.accent.withValues(alpha: 0.08),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -172,7 +173,7 @@ class _BookedTripCard extends StatelessWidget {
                     Text(
                       trip.title,
                       style: font(
-                        color: AppColors.navy,
+                        color: c.accent,
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),
@@ -183,12 +184,12 @@ class _BookedTripCard extends StatelessWidget {
                     // Location
                     Row(
                       children: [
-                        const Icon(Icons.location_on, size: 14, color: AppColors.textSecondary),
+                        Icon(Icons.location_on, size: 14, color: c.textSecondary),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             trip.location,
-                            style: font(color: AppColors.textSecondary, fontSize: 12),
+                            style: font(color: c.textSecondary, fontSize: 12),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -199,11 +200,11 @@ class _BookedTripCard extends StatelessWidget {
                     // Date
                     Row(
                       children: [
-                        const Icon(Icons.calendar_today, size: 14, color: AppColors.textSecondary),
+                        Icon(Icons.calendar_today, size: 14, color: c.textSecondary),
                         const SizedBox(width: 4),
                         Text(
                           dateFormat.format(trip.date),
-                          style: font(color: AppColors.textSecondary, fontSize: 12),
+                          style: font(color: c.textSecondary, fontSize: 12),
                         ),
                       ],
                     ),
@@ -237,7 +238,7 @@ class _BookedTripCard extends StatelessWidget {
                         Text(
                           '${trip.price.toInt()} ',
                           style: font(
-                            color: AppColors.navy,
+                            color: c.accent,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                           ),
@@ -246,8 +247,8 @@ class _BookedTripCard extends StatelessWidget {
                           'assets/sar_symbol.svg',
                           width: 16,
                           height: 16,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.navy,
+                          colorFilter: ColorFilter.mode(
+                            c.accent,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -258,9 +259,9 @@ class _BookedTripCard extends StatelessWidget {
               ),
             ),
             // Arrow
-            const Padding(
-              padding: EdgeInsets.only(right: 12),
-              child: Icon(Icons.chevron_right, color: AppColors.textSecondary),
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Icon(Icons.chevron_right, color: c.textSecondary),
             ),
           ],
         ),

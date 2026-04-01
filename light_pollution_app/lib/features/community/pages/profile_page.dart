@@ -65,8 +65,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
     final posts = postsAsync.valueOrNull ?? [];
     final userPosts = posts.where((p) => p.userId == user.id).toList();
 
+    final c = context.colors;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.background,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).push(
@@ -138,7 +140,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                       right: 0,
                       bottom: 0,
                       height: 44,
-                      child: Container(color: AppColors.white),
+                      child: Container(color: c.background),
                     ),
                     // Avatar overlapping banner and white area
                     Positioned(
@@ -151,7 +153,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                           shape: BoxShape.circle,
                           color: AppColors.navy,
                           border: Border.all(
-                              color: AppColors.white, width: 3.5),
+                              color: c.background, width: 3.5),
                         ),
                         child: user.avatarUrl != null
                             ? ClipOval(
@@ -190,15 +192,20 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                         Text(
                           user.name,
                           style: font(
-                            color: AppColors.textPrimary,
+                            color: c.textPrimary,
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                         if (user.isVerified) ...[
                           const SizedBox(width: 4),
-                          const Icon(Icons.verified,
-                              color: AppColors.navy, size: 20),
+                          Icon(Icons.verified,
+                              color: c.accent, size: 20),
+                        ],
+                        if (user.isPrivate) ...[
+                          const SizedBox(width: 4),
+                          Icon(Icons.lock,
+                              color: c.textSecondary, size: 16),
                         ],
                       ],
                     ),
@@ -208,7 +215,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                     Text(
                       user.username,
                       style: font(
-                        color: AppColors.textSecondary,
+                        color: c.textSecondary,
                         fontSize: 14,
                       ),
                     ),
@@ -219,7 +226,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                       Text(
                         user.bio,
                         style: font(
-                          color: AppColors.textPrimary,
+                          color: c.textPrimary,
                           fontSize: 14,
                           height: 1.4,
                         ),
@@ -236,9 +243,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
               delegate: _TabBarDelegate(
                 TabBar(
                   controller: _tabController,
-                  labelColor: AppColors.navy,
-                  unselectedLabelColor: AppColors.textSecondary,
-                  indicatorColor: AppColors.navy,
+                  labelColor: c.accent,
+                  unselectedLabelColor: c.textSecondary,
+                  indicatorColor: c.accent,
                   indicatorWeight: 3,
                   labelStyle: font(
                     fontSize: 14,
@@ -299,11 +306,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
 
   Widget _buildEmptyTab(String message) {
     final font = AppFonts.style(context);
+    final c = context.colors;
     return Center(
       child: Text(
         message,
         style: font(
-          color: AppColors.textSecondary,
+          color: c.textSecondary,
           fontSize: 15,
         ),
       ),
@@ -338,7 +346,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: AppColors.white,
+      color: context.colors.background,
       child: tabBar,
     );
   }

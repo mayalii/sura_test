@@ -1765,6 +1765,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not suitable for stargazing. Sky is cloudy or overcast.'**
   String get verdictCloudy;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search users, posts, locations...'**
+  String get searchHint;
+
+  /// No description provided for @people.
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get people;
+
+  /// No description provided for @noUsersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No users found'**
+  String get noUsersFound;
+
+  /// No description provided for @noPostsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No posts found'**
+  String get noPostsFound;
+
+  /// No description provided for @trendingNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending Now'**
+  String get trendingNow;
+
+  /// No description provided for @astronomyNews.
+  ///
+  /// In en, this message translates to:
+  /// **'Astronomy News'**
+  String get astronomyNews;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
+  /// No description provided for @trendingTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending Topics'**
+  String get trendingTopics;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @accountInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Information'**
+  String get accountInfo;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// No description provided for @pushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notifications'**
+  String get pushNotifications;
+
+  /// No description provided for @emailNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Notifications'**
+  String get emailNotifications;
+
+  /// No description provided for @privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// No description provided for @privateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Account'**
+  String get privateAccount;
+
+  /// No description provided for @privateAccountDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Only approved followers can see your posts'**
+  String get privateAccountDesc;
+
+  /// No description provided for @showOnlineStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Online Status'**
+  String get showOnlineStatus;
+
+  /// No description provided for @allowMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Messages from Everyone'**
+  String get allowMessages;
+
+  /// No description provided for @display.
+  ///
+  /// In en, this message translates to:
+  /// **'Display'**
+  String get display;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @appearanceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Light, Dark, or System default'**
+  String get appearanceDesc;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'App Version'**
+  String get appVersion;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @termsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source Licenses'**
+  String get openSourceLicenses;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and all your data. This action cannot be undone.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @dangerZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get dangerZone;
+
+  /// No description provided for @bookmarksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmarks'**
+  String get bookmarksTitle;
+
+  /// No description provided for @noBookmarks.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookmarks yet'**
+  String get noBookmarks;
+
+  /// No description provided for @noBookmarksDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts you bookmark will appear here'**
+  String get noBookmarksDesc;
+
+  /// No description provided for @removeBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark removed'**
+  String get removeBookmark;
+
+  /// No description provided for @sharePost.
+  ///
+  /// In en, this message translates to:
+  /// **'Share post'**
+  String get sharePost;
+
+  /// No description provided for @repost.
+  ///
+  /// In en, this message translates to:
+  /// **'Repost'**
+  String get repost;
+
+  /// No description provided for @bookingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking failed. Please try again.'**
+  String get bookingFailed;
+
+  /// No description provided for @tripFull.
+  ///
+  /// In en, this message translates to:
+  /// **'This trip is fully booked.'**
+  String get tripFull;
+
+  /// No description provided for @alreadyBooked.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already booked this trip.'**
+  String get alreadyBooked;
+
+  /// No description provided for @chatSettingsComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat settings coming soon'**
+  String get chatSettingsComingSoon;
+
+  /// No description provided for @startNewMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new message'**
+  String get startNewMessage;
+
+  /// No description provided for @messagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesTitle;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get themeSystem;
+
+  /// No description provided for @chooseTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Theme'**
+  String get chooseTheme;
+
+  /// No description provided for @privateAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This Account is Private'**
+  String get privateAccountTitle;
+
+  /// No description provided for @privateAccountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Only approved followers can see this user\'s posts and profile details.'**
+  String get privateAccountMessage;
 }
 
 class _AppLocalizationsDelegate

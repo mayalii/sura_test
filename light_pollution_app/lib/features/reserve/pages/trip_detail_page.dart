@@ -19,6 +19,7 @@ class TripDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final font = AppFonts.style(context);
+    final c = context.colors;
     final tripsAsync = ref.watch(tripsStreamProvider);
     final trips = tripsAsync.valueOrNull ?? [];
     if (trips.isEmpty) {
@@ -29,7 +30,7 @@ class TripDetailPage extends ConsumerWidget {
     final dateFormat = DateFormat('EEEE, MMM d, yyyy', isArabic ? 'ar' : 'en');
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.background,
       body: Column(
         children: [
           Expanded(
@@ -135,7 +136,7 @@ class TripDetailPage extends ConsumerWidget {
                         Text(
                           trip.title,
                           style: font(
-                            color: AppColors.navy,
+                            color: c.accent,
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                           ),
@@ -166,7 +167,7 @@ class TripDetailPage extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: AppColors.cardBg,
+                            color: c.card,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
@@ -197,14 +198,14 @@ class TripDetailPage extends ConsumerWidget {
                                     Text(
                                       l10n.guidedBy,
                                       style: font(
-                                        color: AppColors.textSecondary,
+                                        color: c.textSecondary,
                                         fontSize: 12,
                                       ),
                                     ),
                                     Text(
                                       trip.guideName,
                                       style: font(
-                                        color: AppColors.textPrimary,
+                                        color: c.textPrimary,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -217,7 +218,7 @@ class TripDetailPage extends ConsumerWidget {
                               Text(
                                 trip.guideRating.toString(),
                                 style: font(
-                                  color: AppColors.textPrimary,
+                                  color: c.textPrimary,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -230,7 +231,7 @@ class TripDetailPage extends ConsumerWidget {
                         Text(
                           l10n.aboutTrip,
                           style: font(
-                            color: AppColors.navy,
+                            color: c.accent,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
@@ -239,7 +240,7 @@ class TripDetailPage extends ConsumerWidget {
                         Text(
                           trip.description,
                           style: font(
-                            color: AppColors.textPrimary,
+                            color: c.textPrimary,
                             fontSize: 14,
                             height: 1.5,
                           ),
@@ -249,7 +250,7 @@ class TripDetailPage extends ConsumerWidget {
                         Text(
                           l10n.whatsIncluded,
                           style: font(
-                            color: AppColors.navy,
+                            color: c.accent,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           ),
@@ -259,14 +260,14 @@ class TripDetailPage extends ConsumerWidget {
                               padding: const EdgeInsets.only(bottom: 6),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.check_circle,
-                                      size: 18, color: AppColors.navy),
+                                  Icon(Icons.check_circle,
+                                      size: 18, color: c.accent),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       item,
                                       style: font(
-                                        color: AppColors.textPrimary,
+                                        color: c.textPrimary,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -317,10 +318,10 @@ class TripDetailPage extends ConsumerWidget {
               12 + MediaQuery.of(context).padding.bottom,
             ),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: c.surface,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.navy.withValues(alpha: 0.08),
+                  color: c.accent.withValues(alpha: 0.08),
                   blurRadius: 8,
                   offset: const Offset(0, -2),
                 ),
@@ -338,7 +339,7 @@ class TripDetailPage extends ConsumerWidget {
                         Text(
                           '${trip.price.toInt()} ',
                           style: font(
-                            color: AppColors.navy,
+                            color: c.accent,
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
                           ),
@@ -347,8 +348,8 @@ class TripDetailPage extends ConsumerWidget {
                           'assets/sar_symbol.svg',
                           width: 24,
                           height: 24,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.navy,
+                          colorFilter: ColorFilter.mode(
+                            c.accent,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -357,7 +358,7 @@ class TripDetailPage extends ConsumerWidget {
                     Text(
                       l10n.perPerson,
                       style: font(
-                        color: AppColors.textSecondary,
+                        color: c.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -426,9 +427,10 @@ class TripDetailPage extends ConsumerWidget {
       double? decorationThickness,
     }) font,
   ) {
+    final c = context.colors;
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      backgroundColor: c.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -438,12 +440,12 @@ class TripDetailPage extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.confirmation_num, size: 48, color: AppColors.navy),
+              Icon(Icons.confirmation_num, size: 48, color: c.accent),
               const SizedBox(height: 16),
               Text(
                 l10n.bookNow,
                 style: font(
-                  color: AppColors.navy,
+                  color: c.accent,
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
@@ -453,7 +455,7 @@ class TripDetailPage extends ConsumerWidget {
                 trip.title,
                 textAlign: TextAlign.center,
                 style: font(
-                  color: AppColors.textPrimary,
+                  color: c.textPrimary,
                   fontSize: 16,
                 ),
               ),
@@ -464,7 +466,7 @@ class TripDetailPage extends ConsumerWidget {
                   Text(
                     '${trip.price.toInt()} ',
                     style: font(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                       fontSize: 14,
                     ),
                   ),
@@ -473,14 +475,14 @@ class TripDetailPage extends ConsumerWidget {
                     width: 14,
                     height: 14,
                     colorFilter: ColorFilter.mode(
-                      AppColors.textSecondary,
+                      c.textSecondary,
                       BlendMode.srcIn,
                     ),
                   ),
                   Text(
                     ' ${l10n.perPerson}',
                     style: font(
-                      color: AppColors.textSecondary,
+                      color: c.textSecondary,
                       fontSize: 14,
                     ),
                   ),
@@ -521,7 +523,7 @@ class TripDetailPage extends ConsumerWidget {
                 child: Text(
                   l10n.cancel,
                   style: font(
-                    color: AppColors.textSecondary,
+                    color: c.textSecondary,
                     fontSize: 14,
                   ),
                 ),
@@ -566,14 +568,15 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Row(
       children: [
-        Icon(icon, size: 18, color: AppColors.textSecondary),
+        Icon(icon, size: 18, color: c.textSecondary),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: font(color: AppColors.textSecondary, fontSize: 14),
+            style: font(color: c.textSecondary, fontSize: 14),
           ),
         ),
       ],
@@ -615,21 +618,22 @@ class _StatChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.colors;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.cardBg,
+          color: c.card,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           children: [
-            Icon(icon, size: 20, color: AppColors.navy),
+            Icon(icon, size: 20, color: c.accent),
             const SizedBox(height: 4),
             Text(
               value,
               style: font(
-                color: AppColors.navy,
+                color: c.accent,
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
@@ -638,7 +642,7 @@ class _StatChip extends StatelessWidget {
             Text(
               label,
               style: font(
-                color: AppColors.textSecondary,
+                color: c.textSecondary,
                 fontSize: 11,
               ),
             ),

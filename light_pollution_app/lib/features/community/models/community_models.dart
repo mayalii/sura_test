@@ -12,6 +12,11 @@ class MockUser {
     this.isPremium = false,
     this.avatarUrl,
     this.bannerUrl,
+    this.isPrivate = false,
+    this.pushNotifications = true,
+    this.emailNotifications = false,
+    this.showOnlineStatus = true,
+    this.allowMessages = true,
   });
 
   final String id;
@@ -23,6 +28,11 @@ class MockUser {
   final bool isPremium;
   final String? avatarUrl;
   final String? bannerUrl;
+  final bool isPrivate;
+  final bool pushNotifications;
+  final bool emailNotifications;
+  final bool showOnlineStatus;
+  final bool allowMessages;
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,6 +44,11 @@ class MockUser {
       'isPremium': isPremium,
       'avatarUrl': avatarUrl,
       'bannerUrl': bannerUrl,
+      'isPrivate': isPrivate,
+      'pushNotifications': pushNotifications,
+      'emailNotifications': emailNotifications,
+      'showOnlineStatus': showOnlineStatus,
+      'allowMessages': allowMessages,
     };
   }
 
@@ -48,6 +63,11 @@ class MockUser {
       isPremium: map['isPremium'] ?? false,
       avatarUrl: map['avatarUrl'],
       bannerUrl: map['bannerUrl'],
+      isPrivate: map['isPrivate'] ?? false,
+      pushNotifications: map['pushNotifications'] ?? true,
+      emailNotifications: map['emailNotifications'] ?? false,
+      showOnlineStatus: map['showOnlineStatus'] ?? true,
+      allowMessages: map['allowMessages'] ?? true,
     );
   }
 
@@ -61,6 +81,11 @@ class MockUser {
     bool? isPremium,
     String? avatarUrl,
     String? bannerUrl,
+    bool? isPrivate,
+    bool? pushNotifications,
+    bool? emailNotifications,
+    bool? showOnlineStatus,
+    bool? allowMessages,
   }) {
     return MockUser(
       id: id ?? this.id,
@@ -72,6 +97,11 @@ class MockUser {
       isPremium: isPremium ?? this.isPremium,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       bannerUrl: bannerUrl ?? this.bannerUrl,
+      isPrivate: isPrivate ?? this.isPrivate,
+      pushNotifications: pushNotifications ?? this.pushNotifications,
+      emailNotifications: emailNotifications ?? this.emailNotifications,
+      showOnlineStatus: showOnlineStatus ?? this.showOnlineStatus,
+      allowMessages: allowMessages ?? this.allowMessages,
     );
   }
 }

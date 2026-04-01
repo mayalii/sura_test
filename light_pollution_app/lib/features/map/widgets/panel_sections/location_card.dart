@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:light_pollution_app/l10n/app_localizations.dart';
 import 'package:light_pollution_app/core/theme/app_fonts.dart';
 import '../../../../core/theme/panel_theme.dart';
 import '../../models/location_data.dart';

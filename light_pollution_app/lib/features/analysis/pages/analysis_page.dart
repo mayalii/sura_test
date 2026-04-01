@@ -31,7 +31,7 @@ class AnalysisPage extends ConsumerWidget {
     final state = ref.watch(analysisProvider);
 
     return Theme(
-      data: AppTheme.dark,
+      data: AppTheme.darkTheme(Localizations.localeOf(context)),
       child: Scaffold(
         backgroundColor: _DetectColors.background,
         body: SafeArea(

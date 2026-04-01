@@ -20,21 +20,31 @@ class WeatherService {
     }
 
     final data = json.decode(response.body);
-    final current = data['current'];
-    final hourly = data['hourly'];
+    if (data is! Map<String, dynamic>) {
+      throw Exception('Weather API returned unexpected data format');
+    }
+
+    final current = data['current'] as Map<String, dynamic>?;
+    final hourly = data['hourly'] as Map<String, dynamic>?;
+
+    if (current == null || hourly == null) {
+      throw Exception('Weather API response missing current or hourly data');
+    }
 
     return WeatherData(
-      temperature: (current['temperature_2m'] as num).toDouble(),
-      humidity: (current['relative_humidity_2m'] as num).toInt(),
-      cloudCover: (current['cloud_cover'] as num).toInt(),
-      windSpeed: (current['wind_speed_10m'] as num).toDouble(),
-      weatherCode: (current['weather_code'] as num).toInt(),
-      hourlyCloudCover: (hourly['cloud_cover'] as List)
-          .map((e) => (e as num).toInt())
-          .toList(),
-      hourlyTimes: (hourly['time'] as List)
-          .map((e) => e.toString())
-          .toList(),
+      temperature: (current['temperature_2m'] as num?)?.toDouble() ?? 0.0,
+      humidity: (current['relative_humidity_2m'] as num?)?.toInt() ?? 0,
+      cloudCover: (current['cloud_cover'] as num?)?.toInt() ?? 0,
+      windSpeed: (current['wind_speed_10m'] as num?)?.toDouble() ?? 0.0,
+      weatherCode: (current['weather_code'] as num?)?.toInt() ?? 0,
+      hourlyCloudCover: (hourly['cloud_cover'] as List?)
+              ?.map((e) => (e as num?)?.toInt() ?? 0)
+              .toList() ??
+          [],
+      hourlyTimes: (hourly['time'] as List?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
     );
   }
 }

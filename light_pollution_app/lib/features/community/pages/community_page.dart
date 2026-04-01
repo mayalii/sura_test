@@ -11,6 +11,7 @@ import '../providers/community_provider.dart';
 import '../widgets/sky_post_card.dart';
 import '../widgets/comments_sheet.dart';
 import 'compose_post_page.dart';
+import 'user_profile_page.dart';
 
 class CommunityPage extends ConsumerWidget {
   const CommunityPage({super.key});
@@ -23,8 +24,10 @@ class CommunityPage extends ConsumerWidget {
     final homeScaffoldKey = ref.watch(homeScaffoldKeyProvider);
     final font = AppFonts.style(context);
 
+    final c = context.colors;
+
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: c.background,
       appBar: AppBar(
         centerTitle: true,
         leading: GestureDetector(
@@ -62,12 +65,12 @@ class CommunityPage extends ConsumerWidget {
         title: SvgPicture.asset(
           'assets/logo.svg',
           height: 36,
-          colorFilter: const ColorFilter.mode(AppColors.navy, BlendMode.srcIn),
+          colorFilter: ColorFilter.mode(c.accent, BlendMode.srcIn),
         ),
         actions: [
           IconButton(
             onPressed: () => context.push('/map'),
-            icon: const Icon(Icons.explore_outlined, color: AppColors.navy),
+            icon: Icon(Icons.explore_outlined, color: c.accent),
           ),
         ],
       ),
@@ -77,18 +80,18 @@ class CommunityPage extends ConsumerWidget {
             MaterialPageRoute(builder: (_) => const ComposePostPage()),
           );
         },
-        backgroundColor: AppColors.navy,
+        backgroundColor: c.accent,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
       body: postsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: AppColors.navy)),
+        loading: () => Center(child: CircularProgressIndicator(color: c.accent)),
         error: (e, _) => Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Text(
               '${l10n.failedToLoadPosts}\n$e',
               textAlign: TextAlign.center,
-              style: AppFonts.style(context)(color: AppColors.textSecondary),
+              style: AppFonts.style(context)(color: c.textSecondary),
             ),
           ),
         ),
@@ -97,7 +100,7 @@ class CommunityPage extends ConsumerWidget {
             return Center(
               child: Text(
                 l10n.noPostsYet,
-                style: AppFonts.style(context)(color: AppColors.textSecondary),
+                style: AppFonts.style(context)(color: c.textSecondary),
               ),
             );
           }
@@ -110,6 +113,11 @@ class CommunityPage extends ConsumerWidget {
                 onLike: () => ref.read(communityProvider.notifier).toggleLike(post.id),
                 onComment: () => _showComments(context, ref, post),
                 onDelete: () => ref.read(communityProvider.notifier).deletePost(post.id),
+                onUserTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(builder: (_) => UserProfilePage(user: post.user)),
+                  );
+                },
               );
             },
           );

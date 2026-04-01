@@ -43,11 +43,12 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
     final l10n = AppLocalizations.of(context)!;
     final font = AppFonts.style(context);
     final currentUser = ref.watch(currentUserProvider).valueOrNull;
+    final c = context.colors;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -58,7 +59,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.textHint,
+              color: c.textHint,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -68,7 +69,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
             child: Text(
               l10n.comments,
               style: font(
-                color: AppColors.textPrimary,
+                color: c.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -82,7 +83,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
                     padding: const EdgeInsets.all(40),
                     child: Text(
                       l10n.noCommentsYet,
-                      style: font(color: AppColors.textHint),
+                      style: font(color: c.textHint),
                     ),
                   )
                 : ListView.builder(
@@ -100,8 +101,8 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
             padding: EdgeInsets.fromLTRB(
               16, 8, 8, MediaQuery.of(context).padding.bottom + 8,
             ),
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: AppColors.divider)),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: c.divider)),
             ),
             child: Row(
               children: [
@@ -131,7 +132,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
                     decoration: InputDecoration(
                       hintText: l10n.addComment,
                       hintStyle: font(
-                        color: AppColors.textHint,
+                        color: c.textHint,
                         fontSize: 14,
                       ),
                       border: OutlineInputBorder(
@@ -139,7 +140,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: AppColors.cardBg,
+                      fillColor: c.card,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 10,
@@ -157,7 +158,7 @@ class _CommentsSheetState extends ConsumerState<CommentsSheet> {
                           height: 18,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Icon(Icons.send, color: AppColors.navy, size: 22),
+                      : Icon(Icons.send, color: c.accent, size: 22),
                 ),
               ],
             ),
@@ -176,6 +177,7 @@ class _CommentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final font = AppFonts.style(context);
+    final c = context.colors;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Row(
@@ -210,7 +212,7 @@ class _CommentTile extends StatelessWidget {
                       TextSpan(
                         text: '${comment.user.username} ',
                         style: font(
-                          color: AppColors.textPrimary,
+                          color: c.textPrimary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -218,7 +220,7 @@ class _CommentTile extends StatelessWidget {
                       TextSpan(
                         text: comment.text,
                         style: font(
-                          color: AppColors.textSecondary,
+                          color: c.textSecondary,
                           fontSize: 13,
                         ),
                       ),
@@ -228,12 +230,12 @@ class _CommentTile extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   comment.timeAgo,
-                  style: font(color: AppColors.textHint, fontSize: 11),
+                  style: font(color: c.textHint, fontSize: 11),
                 ),
               ],
             ),
           ),
-          const Icon(Icons.favorite_border, color: AppColors.textHint, size: 14),
+          Icon(Icons.favorite_border, color: c.textHint, size: 14),
         ],
       ),
     );
